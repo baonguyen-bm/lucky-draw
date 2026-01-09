@@ -10,15 +10,15 @@ class IndexDb {
     dbKeys: string[]
     tableNames: string[]
     constructor(name: string, tableNames: string[], version = 1, dbKeys: string[] = []) {
-        this.name = name // 数据库名称
-        this.version = version // 数据库版本号
-        this.dbKeys = dbKeys // 数据库key
+        this.name = name // Database name
+        this.version = version // Database version number
+        this.dbKeys = dbKeys // Database keys
         this.tableNames = tableNames
         this.dbStore = new Dexie(name) as Dexie & { [key: string]: EntityTable<DbData, 'id'> }
-        // 获取存在的key
+        // Get existing keys
         const stores: Record<string, string> = {}
         for (const tableName of tableNames) {
-            stores[tableName] = `id,dateTime,type,uid,${dbKeys.join(',')}` // 根据需要调整字段
+            stores[tableName] = `id,dateTime,type,uid,${dbKeys.join(',')}` // Adjust fields as needed
         }
         this.dbStore.version(this.version).stores(stores)
     }
@@ -29,7 +29,7 @@ class IndexDb {
 
     /**
      * @param data
-     * @description 添加单条数据，并为数据添加dataTime和type属性
+     * @description Add a single data item and add dateTime and type properties to it
      */
     setData(tableName: string, data: Partial<DbData>) {
         if (!data.dateTime) {
@@ -41,14 +41,14 @@ class IndexDb {
         this.dbStore[tableName].add(data)
     }
 
-    // 更新单条数据
+    // Update single data item
     updateData(tableName: string, data: Partial<DbData>) {
         this.dbStore[tableName].update(data.id, data)
     }
 
     /**
-     * @returns 所有数据Array
-     * @description 删除所有数据并返回被删除的数据
+     * @returns All data Array
+     * @description Delete all data and return the deleted data
      */
     deleteAll(tableName: string) {
         return this.dbStore[tableName].clear()
@@ -56,15 +56,15 @@ class IndexDb {
 
     /**
      * @param data
-     * @description 删除单条数据
+     * @description Delete a single data item
      */
     deleteData(tableName: string, data: Partial<DbData>) {
         this.dbStore[tableName].delete(data.id)
     }
 
     /**
-     * @returns 所有数据Array
-     * @description 获取所有数据
+     * @returns All data Array
+     * @description Get all data
      */
     async getAllData(tableName: string, isAsc: boolean = true) {
         const allData = await this.dbStore[tableName].toArray()
@@ -72,13 +72,13 @@ class IndexDb {
         return isAsc ? allData : allData.reverse()
     }
 
-    // 按 dateTime 排序获取所有数据
+    // Get all data sorted by dateTime
     async getDataSortedByDateTime(tableName: string, orderTimeName: string = 'dataTime') {
         const allData = await this.dbStore[tableName].orderBy(orderTimeName).toArray()
         return allData
     }
 
-    // 分页获取数据
+    // Get paginated data
     async getPageData(tableName: string, pageNum: number, pageSize: number, isAsc: boolean = true) {
         const allData = await this.dbStore[tableName].toArray()
         const start = (pageNum - 1) * pageSize
@@ -87,8 +87,8 @@ class IndexDb {
     }
 
     /**
-     * @returns 数据库总长度
-     * @description 获取所有数据的列表长度
+     * @returns Total length of the database
+     * @description Get the list length of all data
      */
     getAllLength(tableName: string) {
         return this.dbStore[tableName].count()
@@ -96,7 +96,7 @@ class IndexDb {
 
     /**
      *
-     * @param filter 根据筛选条件返回数据
+     * @param filter Return data based on filter criteria
      * @returns
      */
     getFilterData(tableName: string, filter: string) {
@@ -106,7 +106,7 @@ class IndexDb {
     }
 
     getKeys(tableName: string, key: string) {
-        // keys 方法获取所有主键
+        // keys method gets all primary keys
         return this.dbStore[tableName].orderBy(key).keys()
     }
 }

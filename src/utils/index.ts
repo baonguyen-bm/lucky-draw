@@ -1,10 +1,10 @@
 import dayjs from 'dayjs'
 import { v4 as uuidv4 } from 'uuid'
 /**
- * @description: 处理表格数据，添加x,y,id等信息
- * @param tableData 表格数据
- * @param localRowCount 每一行有多少个元素
- * @returns 处理后的表格数据
+ * @description: Process table data, adding x, y, id and other information
+ * @param tableData Table data
+ * @param localRowCount Number of elements per row
+ * @returns Processed table data
  */
 export function filterData(tableData: any[], localRowCount: number) {
     const dataLength = tableData.length
@@ -16,7 +16,7 @@ export function filterData(tableData: any[], localRowCount: number) {
         tableData[i].x = i % localRowCount + 1
         tableData[i].y = j
         tableData[i].id = i
-        // 是否中奖
+        // Whether won
     }
 
     return tableData
@@ -48,7 +48,7 @@ export function selectCard(cardIndexArr: number[], tableLength: number, personId
 }
 
 export function themeChange(theme: string) {
-    // 获取根html
+    // Get root html
     const html = document.querySelectorAll('html')
     if (html) {
         html[0].setAttribute('data-theme', theme)

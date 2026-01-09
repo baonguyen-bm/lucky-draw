@@ -46,9 +46,9 @@ const {
     <h2>{{ t('viewTitle.globalSetting') }}</h2>
     <!-- <div class="flex flex-wrap h-auto w-full gap-6"> -->
     <GridWaterfall>
-      <!-- 数据操作 -->
+      <!-- Data operations -->
       <DataSetting :reset-data="resetData" :export-all-config-data="exportAllConfigData" :import-all-config-data="importAllConfigData" />
-      <!-- 文本设置（主标题、语言、文字大小） -->
+      <!-- Text settings (Main title, Language, Text size) -->
       <TextSetting
         v-model:top-title-value="topTitleValue"
         v-model:language-value="languageValue"
@@ -58,7 +58,7 @@ const {
         v-model:title-font-sync-global-value="titleFontSyncGlobalValue"
         v-model:language-list="languageList"
       />
-      <!-- 布局设置（列数、卡片宽度、卡片高度 -->
+      <!-- Layout settings (Number of columns, Card width, Card height) -->
       <LayoutSetting
         v-model:form-err="formErr"
         v-model:form-data="formData"
@@ -68,7 +68,7 @@ const {
         :reset-person-layout="resetPersonLayout"
         :is-row-count-change="isRowCountChange"
       />
-      <!-- 主题设置（主题、背景图片） -->
+      <!-- Theme settings (Theme, Background image) -->
       <ThemeSetting
         v-model:theme-value="themeValue"
         v-model:background-image-value="backgroundImageValue"
@@ -78,7 +78,7 @@ const {
         v-model:pattern-color-value="patternColorValue"
         :image-list="imageList"
       />
-      <!-- 图案设置 -->
+      <!-- Pattern settings -->
       <PatternSetting
         :row-count="rowCount"
         :card-color="cardColor"
@@ -87,7 +87,7 @@ const {
         :clear-pattern="clearPattern"
         :reset-pattern="resetPattern"
       />
-      <!-- 功能设置 -->
+      <!-- Feature settings -->
       <AbilitySetting v-model:definite-time="definiteTimeValue" v-model:win-music="isWinMusicValue" />
     </GridWaterfall>
     <!-- </div> -->

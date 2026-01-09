@@ -51,7 +51,7 @@ export function usePlayMusic() {
         globalConfig.setCurrentMusic(item, false)
     }
     function nextPlay() {
-        // 播放下一首
+        // Play next song
         if (localMusicList.value.length >= 1) {
             let index = localMusicList.value.findIndex((item: IMusic) => item.name === currentMusic.value.item.name)
             index++
@@ -61,14 +61,14 @@ export function usePlayMusic() {
             globalConfig.setCurrentMusic(localMusicList.value[index], false)
         }
     }
-    // 监听播放成后开始下一首
+    // Start next song after current one ends
     function onPlayEnd() {
         audio.value.addEventListener('ended', nextPlay)
     }
     onMounted(() => {
         globalConfig.setCurrentMusic(localMusicList.value[0], true)
         onPlayEnd()
-        // 不使用空格控制audio
+        // Do not use spacebar to control audio
     })
     onUnmounted(() => {
         audio.value.removeEventListener('ended', nextPlay)

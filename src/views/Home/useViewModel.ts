@@ -22,7 +22,7 @@ import { confettiFire, createSphereVertices, createTableVertices, getRandomEleme
 const maxAudioLimit = 10
 export function useViewModel() {
     const toast = useToast()
-    // store里面存储的值
+    // Values stored in store
     const { personConfig, globalConfig, prizeConfig } = useStore()
     const {
         getAllPersonList: allPersonList,
@@ -45,7 +45,7 @@ export function useViewModel() {
         getDefiniteTime: definiteTime,
         getWinMusic: isPlayWinMusic,
     } = storeToRefs(globalConfig)
-    // three初始值
+    // Three.js initial values
     const ballRotationY = ref(0)
     const containerRef = ref<HTMLElement>()
     const canOperate = ref(true)
@@ -61,8 +61,8 @@ export function useViewModel() {
         table: [],
         sphere: [],
     }
-    // 页面数据初始值
-    const currentStatus = ref<LotteryStatus>(LotteryStatus.init) // 0为初始状态， 1为抽奖准备状态，2为抽奖中状态，3为抽奖结束状态
+    // Page data initial values
+    const currentStatus = ref<LotteryStatus>(LotteryStatus.init) // 0 for initial state, 1 for lottery preparation state, 2 for drawing state, 3 for drawing end state
     const tableData = ref<any[]>([])
     const luckyTargets = ref<any[]>([])
     const luckyCardList = ref<number[]>([])
@@ -73,7 +73,7 @@ export function useViewModel() {
     const animationFrameId = ref<any>(null)
     const playingAudios = ref<HTMLAudioElement[]>([])
 
-    // 抽奖音乐相关
+    // Lottery music related
     const lotteryMusic = ref<HTMLAudioElement | null>(null)
 
     function initThreeJs() {
@@ -91,7 +91,7 @@ export function useViewModel() {
         renderer.value = new CSS3DRenderer()
         renderer.value.setSize(width, height * 0.9)
         renderer.value.domElement.style.position = 'absolute'
-        // 垂直居中
+        // Vertical center
         renderer.value.domElement.style.paddingTop = '50px'
         renderer.value.domElement.style.top = '50%'
         renderer.value.domElement.style.left = '50%'
@@ -155,10 +155,10 @@ export function useViewModel() {
 
             objects.value.push(object)
         }
-        // 创建横铺的界面
+        // Create table layout interface
         const tableVertices = createTableVertices({ tableData: tableData.value, rowCount: rowCount.value, cardSize: cardSize.value })
         targets.table = tableVertices
-        // 创建球体
+        // Create sphere
         const sphereVertices = createSphereVertices({ objectsLength: objects.value.length })
         targets.sphere = sphereVertices
         window.addEventListener('resize', onWindowResize, false)
@@ -171,9 +171,9 @@ export function useViewModel() {
         }
     }
     /**
-     * @description: 位置变换
-     * @param targets 目标位置
-     * @param duration 持续时间
+     * @description: Position transformation
+     * @param targets Target positions
+     * @param duration Duration
      */
     function transform(targets: any[], duration: number) {
         TWEEN.removeAll()
@@ -210,7 +210,7 @@ export function useViewModel() {
                     })
             }
 
-            // 这个补间用来在位置与旋转补间同步执行，通过onUpdate在每次更新数据后渲染scene和camera
+            // This tween is used to execute simultaneously with position and rotation tweens, rendering the scene and camera via onUpdate after each data update
             new TWEEN.Tween({})
                 .to({}, duration * 2)
                 .onUpdate(render)
@@ -222,7 +222,7 @@ export function useViewModel() {
         })
     }
     /**
-     * @description: 窗口大小改变时重新设置渲染器的大小
+     * @description: Resize renderer when window size changes
      */
     function onWindowResize() {
         camera.value.aspect = window.innerWidth / window.innerHeight
@@ -240,14 +240,14 @@ export function useViewModel() {
         if (controls.value) {
             controls.value.update()
         }
-        // 设置自动旋转
-        // 设置相机位置
+        // Set automatic rotation
+        // Set camera position
         animationFrameId.value = requestAnimationFrame(animation)
     }
     /**
-     * @description: 旋转的动画
-     * @param rotateY 绕y轴旋转圈数
-     * @param duration 持续时间，单位秒
+     * @description: Rotation animation
+     * @param rotateY Number of rotations around y-axis
+     * @param duration Duration in seconds
      */
     function rollBall(rotateY: number, duration: number) {
         TWEEN.removeAll()
@@ -278,7 +278,7 @@ export function useViewModel() {
         })
     }
     /**
-     * @description: 视野转回正面
+     * @description: Reset view back to front
      */
     function resetCamera() {
         new TWEEN.Tween(camera.value.position)
@@ -319,7 +319,7 @@ export function useViewModel() {
     }
 
     /**
-     * @description: 开始抽奖音乐
+     * @description: Start drawing music
      */
     function startLotteryMusic() {
         if (!isPlayWinMusic.value) {
@@ -335,12 +335,12 @@ export function useViewModel() {
         lotteryMusic.value.volume = 0.7
 
         lotteryMusic.value.play().catch((error) => {
-            console.error('播放抽奖音乐失败:', error)
+            console.error('Failed to play lottery music:', error)
         })
     }
 
     /**
-     * @description: 停止抽奖音乐
+     * @description: Stop drawing music
      */
     function stopLotteryMusic() {
         if (!isPlayWinMusic.value) {
@@ -353,61 +353,61 @@ export function useViewModel() {
     }
 
     /**
-     * @description: 播放结束音效
+     * @description: Play end sound effect
      */
     function playEndSound() {
         if (!isPlayWinMusic.value) {
             return
         }
-        console.log('准备播放结束音效', dongSound)
+        console.log('Preparing to play end sound', dongSound)
 
-        // 清理已结束的音频
+        // Clear ended audios
         playingAudios.value = playingAudios.value.filter(audio => !audio.ended)
 
         try {
             const endSound = new Audio(dongSound)
             endSound.volume = 1.0
 
-            // 简化播放逻辑
+            // Simplify play logic
             const playPromise = endSound.play()
 
             if (playPromise) {
                 playPromise
                     .then(() => {
-                        console.log('结束音效播放成功')
+                        console.log('End sound played successfully')
                         playingAudios.value.push(endSound)
                     })
                     .catch((err) => {
-                        console.error('播放失败:', err.name, err.message)
+                        console.error('Playback failed:', err.name, err.message)
                         if (err.name === 'NotAllowedError') {
-                            console.warn('自动播放被阻止，需用户交互后播放')
+                            console.warn('Autoplay blocked, user interaction required')
                         }
                     })
             }
 
             endSound.onended = () => {
-                console.log('结束音效播放完成')
+                console.log('End sound playback completed')
                 const index = playingAudios.value.indexOf(endSound)
                 if (index > -1)
                     playingAudios.value.splice(index, 1)
             }
         }
         catch (error) {
-            console.error('创建音频对象失败:', error)
+            console.error('Failed to create audio object:', error)
         }
     }
 
     /**
-     * @description: 重置音频状态
+     * @description: Reset audio state
      */
     function resetAudioState() {
         if (!isPlayWinMusic.value) {
             return
         }
-        // 停止抽奖音乐
+        // Stop lottery music
         stopLotteryMusic()
 
-        // 清理所有正在播放的音频
+        // Clean up all currently playing audios
         playingAudios.value.forEach((audio) => {
             if (!audio.ended && !audio.paused) {
                 audio.pause()
@@ -417,27 +417,27 @@ export function useViewModel() {
     }
 
     /**
-     * @description: 开始抽奖，由横铺变换为球体（或其他图形）
-     * @returns 随机抽取球数据
+     * @description: Start drawing, transform from table to sphere (or other shapes)
+     * @returns Randomly selected sphere data
      */
-    /// <IP_ADDRESS>description 进入抽奖准备状态
+    /// <description>Enter lottery preparation state
     async function enterLottery() {
         if (!canOperate.value) {
             return
         }
 
-        // 重置音频状态
+        // Reset audio state
         resetAudioState()
 
-        // 预加载音频资源以解决浏览器自动播放策略
+        // Preload audio resources to address browser autoplay policy
         try {
             const audioContext = window.AudioContext || (window as any).webkitAudioContext
             if (audioContext) {
-                console.log('音频上下文可用')
+                console.log('AudioContext is available')
             }
         }
         catch (e) {
-            console.warn('音频上下文不可用:', e)
+            console.warn('AudioContext is not available:', e)
         }
 
         if (!intervalTimer.value) {
@@ -456,13 +456,13 @@ export function useViewModel() {
         rollBall(0.1, 2000)
     }
     /**
-     * @description 开始抽奖
+     * @description Start drawing
      */
     function startLottery() {
         if (!canOperate.value) {
             return
         }
-        // 验证是否已抽完全部奖项
+        // Verify if all prizes have been drawn
         if (currentPrize.value.isUsed || !currentPrize.value) {
             toast.open({
                 message: i18n.global.t('error.personIsAllDone'),
@@ -474,7 +474,7 @@ export function useViewModel() {
             return
         }
         personPool.value = currentPrize.value.isAll ? notThisPrizePersonList.value : notPersonList.value
-        // 验证抽奖人数是否还够
+        // Verify if there are enough people left for the draw
         if (personPool.value.length < currentPrize.value.count - currentPrize.value.isUsedCount) {
             toast.open({
                 message: i18n.global.t('error.personNotEnough'),
@@ -486,7 +486,7 @@ export function useViewModel() {
             return
         }
         luckyCount.value = 10
-        // 自定义抽奖个数
+        // Custom draw count
 
         let leftover = currentPrize.value.count - currentPrize.value.isUsedCount
         const customCount = currentPrize.value.separateCount
@@ -499,7 +499,7 @@ export function useViewModel() {
             }
         }
         luckyCount.value = leftover < luckyCount.value ? leftover : luckyCount.value
-        // 重构抽奖函数
+        // Refactor draw function
         luckyTargets.value = getRandomElements(personPool.value, luckyCount.value)
         luckyTargets.value.forEach((item) => {
             const index = personPool.value.findIndex(person => person.id === item.id)
@@ -509,14 +509,14 @@ export function useViewModel() {
         })
 
         toast.open({
-            // message: `现在抽取${currentPrize.value.name} ${leftover}人`,
+            // message: `Now drawing ${currentPrize.value.name} ${leftover} people`,
             message: i18n.global.t('error.startDraw', { count: currentPrize.value.name, leftover }),
             type: 'default',
             position: 'top-right',
             duration: 8000,
         })
 
-        // 开始播放抽奖音乐
+        // Start playing lottery music
         startLotteryMusic()
 
         currentStatus.value = LotteryStatus.running
@@ -530,16 +530,16 @@ export function useViewModel() {
         }
     }
     /**
-     * @description: 停止抽奖，抽出幸运人
+     * @description: Stop drawing, select lucky winners
      */
     async function stopLottery() {
         if (!canOperate.value) {
             return
         }
-        // 停止抽奖音乐
+        // Stop lottery music
         stopLotteryMusic()
 
-        // 播放结束音效
+        // Play end sound effect
         playEndSound()
 
         //   clearInterval(intervalTimer.value)
@@ -585,16 +585,16 @@ export function useViewModel() {
                 })
         })
     }
-    // 播放音频，中将卡片越多audio对象越多，声音越大
+    // Play audio; the more winning cards, the more audio objects, the louder the sound
     function playWinMusic() {
         if (!isPlayWinMusic.value) {
             return
         }
-        // 清理已结束的音频
+        // Clear ended audios
         playingAudios.value = playingAudios.value.filter(audio => !audio.ended && !audio.paused)
 
         if (playingAudios.value.length > maxAudioLimit) {
-            console.log('音频播放数量已达到上限，请勿重复播放')
+            console.log('Audio playback limit reached, please do not repeat')
             return
         }
 
@@ -604,7 +604,7 @@ export function useViewModel() {
         playingAudios.value.push(enterNewAudio)
         enterNewAudio.play()
             .then(() => {
-                // 当音频播放结束后，从数组中移除
+                // When audio ends, remove it from the array
                 enterNewAudio.onended = () => {
                     const index = playingAudios.value.indexOf(enterNewAudio)
                     if (index > -1) {
@@ -613,15 +613,15 @@ export function useViewModel() {
                 }
             })
             .catch((error) => {
-                console.error('播放音频失败:', error)
-                // 如果播放失败，也从数组中移除
+                console.error('Failed to play audio:', error)
+                // If playback fails, also remove it from the array
                 const index = playingAudios.value.indexOf(enterNewAudio)
                 if (index > -1) {
                     playingAudios.value.splice(index, 1)
                 }
             })
 
-        // 播放错误时从数组中移除
+        // Remove from array on playback error
         enterNewAudio.onerror = () => {
             const index = playingAudios.value.indexOf(enterNewAudio)
             if (index > -1) {
@@ -630,7 +630,7 @@ export function useViewModel() {
         }
     }
     /**
-     * @description: 继续,意味着这抽奖作数，计入数据库
+     * @description: Continue, meaning this draw counts, record to database
      */
     async function continueLottery() {
         if (!canOperate.value) {
@@ -656,10 +656,10 @@ export function useViewModel() {
         await enterLottery()
     }
     /**
-     * @description: 放弃本次抽奖，回到初始状态
+     * @description: Abandon current draw, return to initial state
      */
     function quitLottery() {
-        // 停止抽奖音乐
+        // Stop lottery music
         stopLotteryMusic()
 
         enterLottery()
@@ -667,18 +667,18 @@ export function useViewModel() {
     }
 
     /**
-     * @description: 随机替换卡片中的数据（不改变原有的值，只是显示）
-     * @param {string} mod 模式
+     * @description: Randomly replace data in cards (does not change original values, only for display)
+     * @param {string} mod Mode
      */
     function randomBallData(mod: 'default' | 'lucky' | 'sphere' = 'default') {
-        // 两秒执行一次
+        // Execute every two seconds
         intervalTimer.value = setInterval(() => {
-            // 产生随机数数组
+            // Generate random index array
             const indexLength = 4
             const cardRandomIndexArr: number[] = []
             const personRandomIndexArr: number[] = []
             for (let i = 0; i < indexLength; i++) {
-                // 解决随机元素概率过于不均等问题
+                // Address issue of random element probability being too uneven
                 const randomCardIndex = Math.floor(Math.random() * (tableData.value.length - 1))
                 const randomPersonIndex = Math.floor(Math.random() * (allPersonList.value.length - 1))
                 if (luckyCardList.value.includes(randomCardIndex)) {
@@ -696,7 +696,7 @@ export function useViewModel() {
         }, 200)
     }
     /**
-     * @description: 键盘监听，快捷键操作
+     * @description: Keyboard listener, shortcut operations
      */
     function listenKeyboard(e: any) {
         if ((e.keyCode !== 32 || e.keyCode !== 27) && !canOperate.value) {
@@ -726,28 +726,28 @@ export function useViewModel() {
         }
     }
     /**
-     * @description: 清理资源，避免内存溢出
+     * @description: Clean up resources to avoid memory leaks
      */
     function cleanup() {
-        // 停止所有Tween动画
+        // Stop all Tween animations
         TWEEN.removeAll()
 
-        // 清理动画循环
+        // Clean up animation loop
         if ((window as any).cancelAnimationFrame) {
             (window as any).cancelAnimationFrame(animationFrameId.value)
         }
         clearInterval(intervalTimer.value)
         intervalTimer.value = null
 
-        // 停止抽奖音乐
+        // Stop lottery music
         stopLotteryMusic()
 
-        // 清理所有音频资源
+        // Clean up all audio resources
         playingAudios.value.forEach((audio) => {
             if (!audio.ended && !audio.paused) {
                 audio.pause()
             }
-            // 释放音频资源
+            // Release audio resources
             audio.src = ''
             audio.load()
         })
@@ -788,7 +788,7 @@ export function useViewModel() {
             controls.value.removeEventListener('change')
             controls.value.dispose()
         }
-        //   移除所有事件监听
+        //   Remove all event listeners
         window.removeEventListener('resize', onWindowResize)
         scene.value = null
         camera.value = null
@@ -796,21 +796,21 @@ export function useViewModel() {
         controls.value = null
     }
     /**
-     * @description: 设置默认人员列表
+     * @description: Set default person list
      */
     function setDefaultPersonList() {
         personConfig.setDefaultPersonList()
-        // 刷新页面
+        // Refresh page
         window.location.reload()
     }
     const init = () => {
         const startTime = Date.now()
-        const maxWaitTime = 2000 // 2秒
+        const maxWaitTime = 2000 // 2 seconds
 
         const checkAndInit = () => {
-            // 如果人员列表有数据或者等待时间超过2秒，则执行初始化
+            // If person list has data or wait time exceeds 2 seconds, execute initialization
             if (allPersonList.value.length > 0 || (Date.now() - startTime) >= maxWaitTime) {
-                console.log('初始化完成')
+                console.log('Initialization complete')
                 tableData.value = initTableData({ allPersonList: allPersonList.value, rowCount: rowCount.value })
                 initThreeJs()
                 animation()
@@ -820,9 +820,9 @@ export function useViewModel() {
                 isInitialDone.value = true
             }
             else {
-                console.log('等待人员列表数据...')
-                // 继续等待
-                setTimeout(checkAndInit, 100) // 每100毫秒检查一次
+                console.log('Waiting for person list data...')
+                // Continue waiting
+                setTimeout(checkAndInit, 100) // Check every 100ms
             }
         }
 

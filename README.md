@@ -15,15 +15,15 @@
 [![release data](https://img.shields.io/github/release-date/log1997/log-lottery)](https://github.com/LOG1997/log-lottery/releases)
 </div>
 
-log-lottery是一个可配置可定制化的抽奖应用，炫酷3D球体，可用于年会抽奖等活动，支持奖品、人员、界面、图片音乐配置。
+log-lottery is a configurable and customizable lucky draw application with a cool 3D sphere. It is suitable for annual meeting lucky draws and other events, supporting configuration for prizes, personnel, interface, images, and music.
 
-> 如果进入网站遇到图片无法显示或有报错的情况，请先到【全局配置】-【界面配置】菜单中点击【重置所有数据】按钮清除数据后进行更新。
+> If you encounter issues with images not displaying or errors when entering the site, please go to the [Global Configuration] - [Interface Configuration] menu and click the [Reset All Data] button to clear data before updating.
 
-## 要求
+## Requirements
 
-使用PC端最新版Chrome或Edge浏览器。
+Use the latest version of Chrome or Edge browser on PC.
 
-访问地址：
+Access URL:
 
 <https://lottery.to2026.xyz/log-lottery>
 
@@ -31,60 +31,60 @@ or
 
 <https://log1997.github.io/log-lottery/>
 
-开发仓促，若以上网站内容存在bug还请宽容。
-如果想要访问2025年12月31日前的版本，请前往：<https://to2026.xyz/log-lottery>
+Developed in a hurry, please be understanding if there are bugs.
+If you want to access the version before December 31, 2025, please visit: <https://to2026.xyz/log-lottery>
 
 ## TODO
 
-- [x] 🕍 炫酷3D球体，年会抽奖必备，开箱即用
-- [x] 💾 本地持久化存储
-- [x] 🎁 奖品奖项配置
-- [x] 👱 抽奖名单设置管理
-- [x] 🎼 播放背景音乐
-- [x] 🖼️ excel表格导入人员名单、抽奖结果使用excel导出
-- [x] 🎈 可增加临时抽奖
-- [x] 🧨 国际化多语言
-- [x] 🍃 更换背景图片
-- [x] 🚅 添加docker构建
-- [x] 😘 弹幕（开发中）
-- [ ] 🧵 卡片组成多种形状
+- [x] 🕍 Cool 3D sphere, essential for annual meeting lucky draws, ready to use out of the box
+- [x] 💾 Local persistent storage
+- [x] 🎁 Prize and award configuration
+- [x] 👱 Lucky draw list management
+- [x] 🎼 Background music playback
+- [x] 🖼️ Import personnel lists via Excel, export results via Excel
+- [x] 🎈 Temporary lucky draw support
+- [x] 🧨 Internationalization support
+- [x] 🍃 Changeable background images
+- [x] 🚅 Docker build support
+- [x] 😘 Barrage (In development)
+- [ ] 🧵 Cards forming multiple shapes
 
 ...
-需要更多功能或发现bug请留言[issues](https://github.com/LOG1997/log-lottery/issues)
+If you need more features or find bugs, please leave a message in [issues](https://github.com/LOG1997/log-lottery/issues)
 
-## 详细介绍
+## Detailed Introduction
 
-### 配置参与人员
+### Personnel Configuration
 
-于人员配置管理界面下载excel模板，按要求填好数据后导入即可。
+Download the Excel template from the personnel configuration management interface, fill in the data as required, and import it.
 
-### 配置奖项
+### Prize Configuration
 
-于奖项配置管理界面添加奖项后，自定义修改名称、抽取人数、是否全员参加、图片显示。
+After adding prizes in the prize configuration management interface, you can customize the name, number of winners, whether all personnel participate, and image display.
 
-### 界面配置
+### Interface Configuration
 
-可自定义配置标题、列数、卡片颜色、首页图案等。
+You can customize the title, number of columns, card color, homepage pattern, etc.
 
-### 图片和音乐管理
+### Image and Music Management
 
-上传图片或音乐即可，数据使用indexdb在浏览器本地进行存储。
+Upload images or music; data is stored locally in the browser using IndexDB.
 
-## 预览
+## Preview
 
-首页
+Home
 <div align="center">
     <img src="./static/images/home.png" alt="img2-1" width="400" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin: 8px;">
     <img src="./static//images/home_prizelist.png" alt="img2-2" width="400" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin: 8px;">
 </div>
 
-抽奖
+Lottery
 <div align="center">
     <img src="./static/images/lottery-enter.png" alt="img2-1" width="400" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin: 8px;">
     <img src="./static/images/lottery-done.png" alt="img2-2" width="400" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin: 8px;">
 </div>
 
-配置
+Configuration
 <div align="center">
     <img src="./static/images/config_personall.png" alt="img2-1" width="400" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin: 8px;">
     <img src="./static/images/config_prize.png" alt="img2-1" width="400" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin: 8px;">
@@ -92,9 +92,9 @@ or
     <img src="./static/images/config_pattern.png" alt="img2-1" width="400" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin: 8px;">
 </div>
 
-图片音乐配置
+Image and Music Configuration
 
-## 技术
+## Technology
 
 - vue3
 - threejs
@@ -102,75 +102,72 @@ or
 - pinia
 - daisyui
 
-## 开发
+## Development
 
-安装依赖
+Install dependencies
+```bash
+npm install pnpm -g
+```
 
 ```bash
 pnpm i
-or
-npm install
 ```
 
-开发运行
+Development run
 
 ```bash
 pnpm dev
-or
-npm run dev
 ```
 
-打包
+Build
 
 ```bash
 pnpm build
-or
-npm run build
 ```
 
-> 项目思路来源于 <https://github.com/moshang-xc/lottery>
+> Project concept inspired by <https://github.com/moshang-xc/lottery>
 
-## Docker支持
+## Docker Support
 
-以下任意方式选一种即可
+Choose one of the following methods:
 
-1. 拉取镜像，从Docker Hub拉取镜像[log-lottery](https://hub.docker.com/r/log1997/log-lottery)
+1. Pull the image from Docker Hub: [log-lottery](https://hub.docker.com/r/log1997/log-lottery)
 
     ```bash
     docker pull log1997/log-lottery:latest
     ```
 
-    运行容器
+    Run the container:
 
     ```bash
     docker run -d --name log-lottery -p 9279:80 log1997/log-lottery:latest
     ```
 
-2. 手动构建镜像
+2. Manually build the image:
 
     ```bash
     docker build -t log-lottery .
     ```
 
-    运行容器
+    Run the container:
 
     ```bash
     docker run -d -p 9279:80 log-lottery
     ```
 
-    容器运行成功后即可在本地通过<http://localhost:9279/log-lottery/>访问
+    Once the container is running, access it locally via <http://localhost:9279/log-lottery/>
 
-## 软件安装包
+## Software Package
 
-可前往[Releases](https://github.com/LOG1997/log-lottery/releases)下载。
+Available for download at [Releases](https://github.com/LOG1997/log-lottery/releases).
 
-目前只支持windows平台使用，跨平台安装包暂不支持，如有需要请自行编译，参照[贡献文档](https://github.com/LOG1997/log-lottery/blob/main/.github/CONTRIBUTING.md)
+Currently, only Windows is supported. Cross-platform packages are not yet available. If needed, please compile manually referring to the [Contribution Document](https://github.com/LOG1997/log-lottery/blob/main/.github/CONTRIBUTING.md)
 
-## 支持项目
+## Support the Project
 
-<h3>💝 赞助支持</h3>
+<h3>💝 Sponsorship</h3>
 
-<p><em>如果您觉得 log-lottery 对您有帮助，欢迎赞助支持，您的支持是我们不断前进的动力！</em></p>
+<p><em>If you find log-lottery helpful, feel free to sponsor its development. Your support is our motivation!</em></p>
 
 <div>
  <img src="./static/images/ZanShang.png" height="240" alt="WeChat Code">

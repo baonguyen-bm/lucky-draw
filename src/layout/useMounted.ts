@@ -15,7 +15,7 @@ export function useMounted(tipDialog: Ref<any>) {
     const { getPrizeConfig: prizeList, getTemporaryPrize: temporaryPrize } = storeToRefs(prizeConfig)
     const tipDesc = ref('')
     const { t } = useI18n()
-    // 设置当前奖列表
+    // Set current prize list
     function setCurrentPrize() {
         if (prizeList.value.length <= 0) {
             return
@@ -32,7 +32,7 @@ export function useMounted(tipDialog: Ref<any>) {
             }
         }
     }
-    // 判断是否手机端访问
+    // Determine if it is a mobile access
     function judgeMobile() {
         const ua = navigator.userAgent
         const isAndroid = ua.includes('Android') || ua.includes('Adr')
@@ -42,7 +42,7 @@ export function useMounted(tipDialog: Ref<any>) {
 
         return isAndroid || isIOS
     }
-    // 判断是否chrome或者edge访问
+    // Determine if it is Chrome or Edge access
     function judgeChromeOrEdge() {
         const ua = navigator.userAgent
         const isChrome = ua.includes('Chrome')

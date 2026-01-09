@@ -1,17 +1,17 @@
 export const navList = [
     {
         id: 0,
-        name: '首页',
+        name: 'Home',
         url: 'home',
     },
     {
         id: 1,
-        name: '项目',
+        name: 'Project',
         url: 'project',
     },
     {
         id: 2,
-        name: '关于',
+        name: 'About',
         url: 'about',
     },
 ]

@@ -7,7 +7,7 @@ import { IndexDb } from '@/utils/dexie'
 import { defaultPersonList } from './data'
 import { usePrizeConfig } from './prizeConfig'
 
-// 获取IPersonConfig的key组成数组
+// Get array of keys from IPersonConfig
 export const personListKey = Object.keys(defaultPersonList[0])
 export const usePersonConfig = defineStore('person', () => {
     const personDb = new IndexDb('person', ['allPersonList', 'alreadyPersonList'], 1, ['createTime'])
@@ -24,11 +24,11 @@ export const usePersonConfig = defineStore('person', () => {
     })
 
     // NOTE: getter
-    // 获取全部配置
+    // Get all configurations
     const getPersonConfig = computed(() => personConfig.value)
-    // 获取全部人员名单
+    // Get list of all personnel
     const getAllPersonList = computed(() => personConfig.value.allPersonList)
-    // 获取未获此奖的人员名单
+    // Get list of personnel who haven't won this prize
     const getNotThisPrizePersonList = computed(() => {
         const currentPrize = usePrizeConfig().prizeConfig.currentPrize
         const data = personConfig.value.allPersonList.filter((item: IPersonConfig) => {
@@ -38,20 +38,20 @@ export const usePersonConfig = defineStore('person', () => {
         return data
     })
 
-    // 获取已中奖人员名单
+    // Get list of already won personnel
     const getAlreadyPersonList = computed(() => {
         return personConfig.value.allPersonList.filter((item: IPersonConfig) => {
             return item.isWin === true
         })
     })
-    // 获取中奖人员详情
+    // Get details of already won personnel
     const getAlreadyPersonDetail = computed(() => personConfig.value.alreadyPersonList)
-    // 获取未中奖人员名单
+    // Get list of personnel who haven't won any prize
     const getNotPersonList = computed(() => personConfig.value.allPersonList.filter((item: IPersonConfig) => {
         return item.isWin === false
     }))
     // NOTE: action
-    // 添加全部未中奖人员
+    // Add all non-winning personnel
     function addNotPersonList(personList: IPersonConfig[]) {
         if (personList.length <= 0) {
             return
@@ -61,13 +61,13 @@ export const usePersonConfig = defineStore('person', () => {
         })
         personDb.setAllData('allPersonList', personList)
     }
-    // 添加数据
+    // Add data
     function addOnePerson(person: IPersonConfig[]) {
         if (person.length <= 0) {
             return
         }
         if (person.length > 1) {
-            console.warn('只支持添加单个用户')
+            console.warn('Only single user addition is supported')
             return
         }
         person.forEach((item: IPersonConfig) => {
@@ -75,7 +75,7 @@ export const usePersonConfig = defineStore('person', () => {
             personDb.setData('allPersonList', item)
         })
     }
-    // 添加已中奖人员
+    // Add winning personnel
     function addAlreadyPersonList(personList: IPersonConfig[], prize: IPrizeConfig | null) {
         if (personList.length <= 0) {
             return
@@ -98,7 +98,7 @@ export const usePersonConfig = defineStore('person', () => {
             personDb.setData('alreadyPersonList', toRaw(person))
         })
     }
-    // 从已中奖移动到未中奖
+    // Move from already won to not won
     function moveAlreadyToNot(person: IPersonConfig) {
         if (person.id === undefined || person.id == null) {
             return
@@ -122,7 +122,7 @@ export const usePersonConfig = defineStore('person', () => {
         }
         personDb.deleteData('alreadyPersonList', person)
     }
-    // 删除指定人员
+    // Delete specific personnel
     function deletePerson(person: IPersonConfig) {
         if (person.id !== undefined || person.id != null) {
             const allPersonListRaw = toRaw(personConfig.value.allPersonList)
@@ -133,7 +133,7 @@ export const usePersonConfig = defineStore('person', () => {
             personDb.deleteData('alreadyPersonList', person)
         }
     }
-    // 删除所有人员
+    // Delete all personnel
     function deleteAllPerson() {
         personConfig.value.allPersonList = []
         personConfig.value.alreadyPersonList = []
@@ -141,16 +141,16 @@ export const usePersonConfig = defineStore('person', () => {
         personDb.deleteAll('alreadyPersonList')
     }
 
-    // 删除所有人员
+    // Delete all personnel
     function resetPerson() {
         personConfig.value.allPersonList = []
         personConfig.value.alreadyPersonList = []
         personDb.deleteAll('allPersonList')
         personDb.deleteAll('alreadyPersonList')
     }
-    // 重置已中奖人员
+    // Reset winning personnel
     function resetAlreadyPerson() {
-        // 把已中奖人员合并到未中奖人员，要验证是否已存在
+        // Merge winning personnel back into non-winning personnel; verify if they already exist
         personConfig.value.allPersonList.forEach((item: IPersonConfig) => {
             item.isWin = false
             item.prizeName = []
@@ -172,7 +172,7 @@ export const usePersonConfig = defineStore('person', () => {
         personDb.setAllData('allPersonList', defaultPersonList)
         personDb.deleteAll('alreadyPersonList')
     }
-    // 重置所有配置
+    // Reset all configurations
     function reset() {
         personConfig.value = {
             allPersonList: [] as IPersonConfig[],

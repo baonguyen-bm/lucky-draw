@@ -1,3 +1,3 @@
 /**
- * @description 用于将平铺的数组组合到树形数组中
+ * @description Used to combine flat arrays into tree-shaped arrays
  */

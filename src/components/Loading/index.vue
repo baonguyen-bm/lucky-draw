@@ -4,11 +4,11 @@ import { inject } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { loadingKey } from './loading-context'
 
-// 注入全局状态
+// Inject global state
 const loading = inject(loadingKey) as LoadingOptions
 
 const { t } = useI18n()
-// 解构状态（响应式）
+// Destructure state (reactive)
 const { visible, text } = loading
 </script>
 
