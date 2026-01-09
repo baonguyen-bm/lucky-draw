@@ -76,7 +76,7 @@ onUnmounted(() => {
     position: relative;
     background: linear-gradient(135deg, #1a0a0a 0%, #2d1b1b 25%, #1a0a0a 50%, #2d1b1b 75%, #1a0a0a 100%);
     background-size: 400% 400%;
-    animation: gradient-shift 15s ease infinite;
+    // Removed animation: gradient-shift
     overflow: hidden;
 }
 
@@ -88,7 +88,7 @@ onUnmounted(() => {
     height: 100%;
     opacity: 0.6;
     mix-blend-mode: screen;
-    animation: aurora-flow 20s ease-in-out infinite;
+    // Removed animation: aurora-flow - layers are now static
 }
 
 .aurora-layer-1 {
@@ -109,27 +109,5 @@ onUnmounted(() => {
     animation-delay: -14s;
 }
 
-@keyframes gradient-shift {
-    0%, 100% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-}
-
-@keyframes aurora-flow {
-    0%, 100% {
-        transform: translate(0, 0) scale(1);
-        opacity: 0.6;
-    }
-    33% {
-        transform: translate(5%, -5%) scale(1.1);
-        opacity: 0.8;
-    }
-    66% {
-        transform: translate(-5%, 5%) scale(0.9);
-        opacity: 0.5;
-    }
-}
+// Removed keyframe animations - aurora layers are now static
 </style>
