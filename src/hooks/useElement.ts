@@ -60,8 +60,37 @@ export function useElementStyle(element: any, person: IPersonConfig, index: numb
         element.children[0].textContent = person.uid
     }
 
-    element.children[1].style.fontSize = `${textSize}px`
-    element.children[1].style.lineHeight = `${textSize * 3}px`
+    // For lucky cards (winners), allow text wrapping and use responsive font size
+    if (mod === 'lucky') {
+        // Use clamp for responsive font size that adapts to card size
+        const baseSize = textSize
+        const minSize = Math.max(18, baseSize * 0.6)
+        const maxSize = baseSize
+        element.children[1].style.fontSize = `clamp(${minSize}px, ${baseSize * 0.8}px, ${maxSize}px)`
+        element.children[1].style.lineHeight = '1.4'
+        element.children[1].style.whiteSpace = 'normal'
+        element.children[1].style.overflow = 'visible'
+        element.children[1].style.wordWrap = 'break-word'
+        element.children[1].style.wordBreak = 'break-word'
+        element.children[1].style.display = '-webkit-box'
+        element.children[1].style.webkitLineClamp = '2'
+        element.children[1].style.lineClamp = '2' // Standard property
+        element.children[1].style.webkitBoxOrient = 'vertical'
+        element.children[1].style.padding = '0 10px'
+        element.children[1].style.maxHeight = 'none'
+        // Vertically center the name in the card
+        element.children[1].style.top = '50%'
+        element.children[1].style.transform = 'translateY(-50%)'
+    } else {
+        element.children[1].style.fontSize = `${textSize}px`
+        element.children[1].style.lineHeight = `${textSize * 3}px`
+        element.children[1].style.whiteSpace = 'nowrap'
+        element.children[1].style.overflow = 'hidden'
+        element.children[1].style.textOverflow = 'ellipsis'
+        // Reset positioning for regular cards
+        element.children[1].style.top = '40px'
+        element.children[1].style.transform = 'none'
+    }
     element.children[1].style.color = textColor
     // Use subtle dark shadow for light backgrounds instead of colored glow
     element.children[1].style.textShadow = '0 1px 2px rgba(0, 0, 0, 0.1)'

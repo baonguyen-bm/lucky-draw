@@ -87,13 +87,26 @@
         text-align: center;
         z-index: 2;
         position: absolute;
-        top: 40px;
+        top: 50%;
         left: 0px;
         right: 0;
+        transform: translateY(-50%);
         font-weight: bold;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        // Allow text wrapping for long names (especially important for winner cards)
+        white-space: normal;
+        overflow: visible;
+        word-wrap: break-word;
+        word-break: break-word;
+        hyphens: auto;
+        // Support up to 2 lines for names
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2; // Standard property for future compatibility
+        -webkit-box-orient: vertical;
+        line-height: 1.4;
+        padding: 0 10px;
+        // Use clamp for responsive font size
+        font-size: clamp(18px, 4vw, 48px);
         // -webkit-animation: tracking-in-expand-fwd 0.8s cubic-bezier(0.215, 0.61, 0.355, 1) both;
         // animation: tracking-in-expand-fwd 0.8s cubic-bezier(0.215, 0.61, 0.355, 1) both;
         // animation-delay: 0.6s;
