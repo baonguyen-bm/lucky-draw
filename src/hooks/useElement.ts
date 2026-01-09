@@ -6,20 +6,38 @@ export function useElementStyle(element: any, person: IPersonConfig, index: numb
     if (patternList.includes(index + 1) && mod === 'default') {
         element.style.backgroundColor = rgba(patternColor, 0.15)
     }
-    else if (mod === 'sphere' || mod === 'default') {
+    else if (mod === 'sphere') {
+        // Glassmorphism effect for sphere cards: semi-transparent with backdrop blur
+        element.style.backgroundColor = rgba(cardColor, 0.25)
+        element.style.backdropFilter = 'blur(10px) saturate(180%)'
+        element.style.webkitBackdropFilter = 'blur(10px) saturate(180%)'
+    }
+    else if (mod === 'default') {
         // Use higher opacity for light backgrounds to ensure readability
         element.style.backgroundColor = rgba(cardColor, 0.95)
     }
     else if (mod === 'lucky') {
         element.style.backgroundColor = rgba(cardColor, 0.95)
     }
-    element.style.border = `1px solid ${rgba(cardColor, 0.3)}`
-    element.style.boxShadow = `0 4px 12px ${rgba(cardColor, 0.3)}`
+    
+    // Border styling - more subtle for sphere mode
+    if (mod === 'sphere') {
+        element.style.border = `1px solid ${rgba(cardColor, 0.2)}`
+        element.style.boxShadow = `0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)`
+    } else {
+        element.style.border = `1px solid ${rgba(cardColor, 0.3)}`
+        element.style.boxShadow = `0 4px 12px ${rgba(cardColor, 0.3)}`
+    }
     element.style.width = `${cardSize.width}px`
     element.style.height = `${cardSize.height}px`
-    element.style.transition = 'border 0.2s ease'
+    element.style.transition = 'border 0.2s ease, background-color 0.2s ease, backdrop-filter 0.2s ease'
+    element.style.borderRadius = '12px'
+    element.style.overflow = 'hidden'
     if (mod === 'lucky') {
         element.className = 'lucky-element-card'
+    }
+    else if (mod === 'sphere') {
+        element.className = 'element-card sphere-glass'
     }
     else {
         element.className = 'element-card'

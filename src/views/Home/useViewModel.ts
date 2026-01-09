@@ -897,7 +897,7 @@ export function useViewModel() {
                 initThreeJs()
                 animation()
                 containerRef.value!.style.color = `${textColor}`
-                // randomBallData() removed - should only be called when lottery starts, not during initialization
+                randomBallData()
                 window.addEventListener('keydown', listenKeyboard)
                 isInitialDone.value = true
             }
