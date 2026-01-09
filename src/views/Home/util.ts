@@ -3,10 +3,10 @@ import confetti from 'canvas-confetti'
 import { Object3D, Vector3 } from 'three'
 import { filterData } from '@/utils'
 /**
- * @description 初始化表格数据
- * @param0 allPersonList 所有人的列表
- * @param1 rowCount 行数，默认是7行
- * @returns 表格数据
+ * @description Initialize table data
+ * @param0 allPersonList List of all personnel
+ * @param1 rowCount Number of rows, defaults to 7
+ * @returns Table data
  */
 export function initTableData({ allPersonList, rowCount }: { allPersonList: IPersonConfig[], rowCount: number }): IPersonConfig[] {
     let tableData: IPersonConfig[] = []
@@ -26,10 +26,10 @@ export function initTableData({ allPersonList, rowCount }: { allPersonList: IPer
 }
 
 /**
- * @description 横铺图形：处理数据，把每个卡片在界面的位置写入
- * @param0 tableData 表格数据
- * @param1 rowCount 每行有多少个元素
- * @param2 cardSize 卡片的大小
+ * @description Table layout: Process data, set the position of each card on the interface
+ * @param0 tableData Table data
+ * @param1 rowCount Number of elements per row
+ * @param2 cardSize Size of the card
  * @returns  Object3D[]
  */
 export function createTableVertices({ tableData, rowCount, cardSize }: { tableData: IPersonConfig[], rowCount: number, cardSize: { width: number, height: number } }): Object3D[] {
@@ -47,8 +47,8 @@ export function createTableVertices({ tableData, rowCount, cardSize }: { tableDa
     return objects
 }
 /**
- * @description 创建球体
- * @param0 objectsLength 物体的个数
+ * @description Create sphere
+ * @param0 objectsLength Number of objects
  * @returns Object3D[]
  */
 export function createSphereVertices({ objectsLength }: { objectsLength: number }): Object3D[] {

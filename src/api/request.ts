@@ -11,34 +11,34 @@ class Request {
             ...config,
         })
 
-        // 添加请求拦截器
+        // Add request interceptor
         this.instance.interceptors.request.use(
             (config: InternalAxiosRequestConfig) => {
-                // 在发送请求之前做些什么
-                console.log('请求拦截器被触发')
+                // Do something before sending request
+                console.log('Request interceptor triggered')
 
                 return config
             },
             (error: any) => {
-                // 对请求错误做些什么
-                console.error('请求拦截器发生错误：', error)
+                // Do something with request error
+                console.error('Request interceptor error:', error)
 
                 return Promise.reject(error)
             },
         )
 
-        // 添加响应拦截器
+        // Add response interceptor
         this.instance.interceptors.response.use(
             (response: AxiosResponse) => {
-                // 对响应数据做些什么
-                console.log('响应拦截器被触发')
+                // Do something with response data
+                console.log('Response interceptor triggered')
                 const responseData = response.data
 
                 return responseData
             },
             (error: any) => {
-                // 对响应错误做些什么
-                console.error('响应拦截器发生错误：', error)
+                // Do something with response error
+                console.error('Response interceptor error:', error)
 
                 return Promise.reject(error)
             },
@@ -52,7 +52,7 @@ class Request {
     }
 }
 
-// 函数
+// Function
 function request<T>(config: AxiosRequestConfig): Promise<T> {
     const instance = new Request(config)
 

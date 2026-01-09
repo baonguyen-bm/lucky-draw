@@ -27,7 +27,7 @@ function readMd() {
         readmeHtml.value = '<p>Failed to load README content.</p>'
     }
 }
-// 监听语言变化
+// Watch for language changes
 watch(() => i18n.global.locale.value, () => {
     readMd()
 })

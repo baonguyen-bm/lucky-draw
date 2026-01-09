@@ -25,9 +25,9 @@ export const useGlobalConfig = defineStore('global', {
                     textSize: 30,
                     patternColor: '#1b66c9',
                     patternList: defaultPatternList as number[],
-                    background: {}, // 背景颜色或图片
-                    font: '微软雅黑',
-                    titleFont: '微软雅黑',
+                    background: {}, // Background color or image
+                    font: 'sans-serif',
+                    titleFont: 'sans-serif',
                     titleFontSyncGlobal: true,
                 },
                 musicList: defaultMusicList as IMusic[],
@@ -40,156 +40,156 @@ export const useGlobalConfig = defineStore('global', {
         }
     },
     getters: {
-        // 获取全部配置
+        // Get all configurations
         getGlobalConfig(state) {
             return state.globalConfig
         },
-        // 获取标题
+        // Get title
         getTopTitle(state) {
             return state.globalConfig.topTitle
         },
-        // 获取行数
+        // Get row count
         getRowCount(state) {
             return state.globalConfig.rowCount
         },
-        // 获取主题
+        // Get theme
         getTheme(state) {
             return state.globalConfig.theme
         },
-        // 获取卡片颜色
+        // Get card color
         getCardColor(state) {
             return state.globalConfig.theme.cardColor
         },
-        // 获取中奖颜色
+        // Get winning color
         getLuckyColor(state) {
             return state.globalConfig.theme.luckyCardColor
         },
-        // 获取文字颜色
+        // Get text color
         getTextColor(state) {
             return state.globalConfig.theme.textColor
         },
-        // 获取卡片宽高
+        // Get card dimensions
         getCardSize(state) {
             return {
                 width: state.globalConfig.theme.cardWidth,
                 height: state.globalConfig.theme.cardHeight,
             }
         },
-        // 获取文字大小
+        // Get text size
         getTextSize(state) {
             return state.globalConfig.theme.textSize
         },
-        // 获取图案颜色
+        // Get pattern color
         getPatterColor(state) {
             return state.globalConfig.theme.patternColor
         },
-        // 获取图案列表
+        // Get pattern list
         getPatternList(state) {
             return state.globalConfig.theme.patternList
         },
-        // 获取音乐列表
+        // Get music list
         getMusicList(state) {
             return state.globalConfig.musicList
         },
-        // 获取当前音乐
+        // Get current music
         getCurrentMusic(state) {
             return state.currentMusic
         },
-        // 获取图片列表
+        // Get image list
         getImageList(state) {
             return state.globalConfig.imageList
         },
-        // 获取是否显示奖品列表
+        // Get whether to show prize list
         getIsShowPrizeList(state) {
             return state.globalConfig.isSHowPrizeList
         },
-        // 获取当前语言
+        // Get current language
         getLanguage(state) {
             return state.globalConfig.language
         },
-        // 获取背景图片设置
+        // Get background settings
         getBackground(state) {
             return state.globalConfig.theme.background
         },
-        // 获取字体
+        // Get font
         getFont(state) {
             return state.globalConfig.theme.font
         },
-        // 获取标题字体
+        // Get title font
         getTitleFont(state) {
             return state.globalConfig.theme.titleFont
         },
-        // 获取标题字体同步全局
+        // Get title font sync global
         getTitleFontSyncGlobal(state) {
             return state.globalConfig.theme.titleFontSyncGlobal
         },
-        // 获取是否显示头像
+        // Get whether to show avatar
         getIsShowAvatar(state) {
             return state.globalConfig.isShowAvatar
         },
-        // 获取定时抽取时间
+        // Get scheduled draw time
         getDefiniteTime(state) {
             return state.globalConfig.definiteTime
         },
-        // 是否播放获奖音乐
+        // Whether to play winning music
         getWinMusic(state) {
             return state.globalConfig.winMusic
         },
     },
     actions: {
-        // 设置全局配置
+        // Set global configuration
         setGlobalConfig(data: any) {
             this.globalConfig = data
         },
-        // 设置rowCount
+        // Set rowCount
         setRowCount(rowCount: number) {
             this.globalConfig.rowCount = rowCount
         },
-        // 设置标题
+        // Set title
         setTopTitle(topTitle: string) {
             this.globalConfig.topTitle = topTitle
         },
-        // 设置主题
+        // Set theme
         setTheme(theme: any) {
             const { name } = theme
             this.globalConfig.theme.name = name
         },
-        // 设置卡片颜色
+        // Set card color
         setCardColor(cardColor: string) {
             this.globalConfig.theme.cardColor = cardColor
         },
-        // 设置中奖颜色
+        // Set winning color
         setLuckyCardColor(luckyCardColor: string) {
             this.globalConfig.theme.luckyCardColor = luckyCardColor
         },
-        // 设置文字颜色
+        // Set text color
         setTextColor(textColor: string) {
             this.globalConfig.theme.textColor = textColor
         },
-        // 设置卡片宽高
+        // Set card dimensions
         setCardSize(cardSize: { width: number, height: number }) {
             this.globalConfig.theme.cardWidth = cardSize.width
             this.globalConfig.theme.cardHeight = cardSize.height
         },
-        // 设置文字大小
+        // Set text size
         setTextSize(textSize: number) {
             this.globalConfig.theme.textSize = textSize
         },
-        // 设置图案颜色
+        // Set pattern color
         setPatterColor(patterColor: string) {
             this.globalConfig.theme.patternColor = patterColor
         },
-        // 设置图案列表
+        // Set pattern list
         setPatternList(patternList: number[]) {
             this.globalConfig.theme.patternList = patternList
         },
-        // 重置图案列表
+        // Reset pattern list
         resetPatternList() {
             this.globalConfig.theme.patternList = defaultPatternList
         },
-        // 添加音乐
+        // Add music
         addMusic(music: IMusic) {
-            // 验证音乐是否已存在，看name字段
+            // Validate if music exists by name field
             for (let i = 0; i < this.globalConfig.musicList.length; i++) {
                 if (this.globalConfig.musicList[i].name === music.name) {
                     return
@@ -197,7 +197,7 @@ export const useGlobalConfig = defineStore('global', {
             }
             this.globalConfig.musicList.push(music)
         },
-        // 删除音乐
+        // Remove music
         removeMusic(musicId: string) {
             for (let i = 0; i < this.globalConfig.musicList.length; i++) {
                 if (this.globalConfig.musicList[i].id === musicId) {
@@ -206,22 +206,22 @@ export const useGlobalConfig = defineStore('global', {
                 }
             }
         },
-        // 设置当前播放音乐
+        // Set current playing music
         setCurrentMusic(musicItem: IMusic, paused: boolean = true) {
             this.currentMusic = {
                 item: musicItem,
                 paused,
             }
         },
-        // 重置音乐列表
+        // Reset music list
         resetMusicList() {
             this.globalConfig.musicList = JSON.parse(JSON.stringify(defaultMusicList)) as IMusic[]
         },
-        // 清空音乐列表
+        // Clear music list
         clearMusicList() {
             this.globalConfig.musicList = [] as IMusic[]
         },
-        // 添加图片
+        // Add image
         addImage(image: IImage) {
             for (let i = 0; i < this.globalConfig.imageList.length; i++) {
                 if (this.globalConfig.imageList[i].name === image.name) {
@@ -230,7 +230,7 @@ export const useGlobalConfig = defineStore('global', {
             }
             this.globalConfig.imageList.push(image)
         },
-        // 删除图片
+        // Remove image
         removeImage(imageId: string) {
             for (let i = 0; i < this.globalConfig.imageList.length; i++) {
                 if (this.globalConfig.imageList[i].id === imageId) {
@@ -239,52 +239,52 @@ export const useGlobalConfig = defineStore('global', {
                 }
             }
         },
-        // 重置图片列表
+        // Reset image list
         resetImageList() {
             this.globalConfig.imageList = defaultImageList as IImage[]
         },
-        // 清空图片列表
+        // Clear image list
         clearImageList() {
             this.globalConfig.imageList = [] as IImage[]
         },
-        // 设置是否显示奖品列表
+        // Set whether to show prize list
         setIsShowPrizeList(isShowPrizeList: boolean) {
             this.globalConfig.isSHowPrizeList = isShowPrizeList
         },
-        // 设置
+        // Set language
         setLanguage(language: string) {
             this.globalConfig.language = language
             i18n.global.locale.value = language
         },
-        // 设置背景图片
+        // Set background image
         setBackground(background: any) {
             this.globalConfig.theme.background = background
         },
-        // 设置字体
+        // Set font
         setFont(font: any) {
             this.globalConfig.theme.font = font
         },
-        // 设置标题字体
+        // Set title font
         setTitleFont(titleFont: any) {
             this.globalConfig.theme.titleFont = titleFont
         },
-        // 设置同步全局字体
+        // Set sync global font
         setTitleFontSyncGlobal(titleFontSyncGlobal: boolean) {
             this.globalConfig.theme.titleFontSyncGlobal = titleFontSyncGlobal
         },
-        // 设置是否显示头像
+        // Set whether to show avatar
         setIsShowAvatar(isShowAvatar: boolean) {
             this.globalConfig.isShowAvatar = isShowAvatar
         },
-        // 设置定时抽取时间
+        // Set scheduled draw time
         setDefiniteTime(definiteTime: number | null) {
             this.globalConfig.definiteTime = definiteTime
         },
-        // 设置是否播放获奖音乐
+        // Set whether to play winning music
         setIsPlayWinMusic(winMusic: boolean) {
             this.globalConfig.winMusic = winMusic
         },
-        // 重置所有配置
+        // Reset all configurations
         reset() {
             this.globalConfig = {
                 rowCount: 17,
@@ -305,9 +305,9 @@ export const useGlobalConfig = defineStore('global', {
                     textSize: 30,
                     patternColor: '#1b66c9',
                     patternList: defaultPatternList as number[],
-                    background: {}, // 背景颜色或图片
-                    font: '微软雅黑',
-                    titleFont: '微软雅黑',
+                    background: {}, // Background color or image
+                    font: 'sans-serif',
+                    titleFont: 'sans-serif',
                     titleFontSyncGlobal: true,
                 },
                 musicList: defaultMusicList as IMusic[],
@@ -323,7 +323,7 @@ export const useGlobalConfig = defineStore('global', {
         enabled: true,
         strategies: [
             {
-                // 如果要存储在localStorage中
+                // If stored in localStorage
                 storage: localStorage,
                 key: 'globalConfig',
                 paths: ['globalConfig'],

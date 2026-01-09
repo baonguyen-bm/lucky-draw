@@ -41,22 +41,22 @@ export default defineConfig(({ mode }) => {
                 ext: '.gz',
             }),
             mode === 'prebuild' ? visualizer({
-                emitFile: true, // 是否被触摸
-                filename: 'test.html', // 生成分析网页文件名
-                open: true, // 在默认用户代理中打开生成的文件
-                gzipSize: true, // 从源代码中收集 gzip 大小并将其显示在图表中
-                brotliSize: true, // 从源代码中收集 brotli 大小并将其显示在图表中
+                emitFile: true, // Whether to touch
+                filename: 'test.html', // Analysis page filename
+                open: true, // Open generated file in default browser
+                gzipSize: true, // Collect gzip size and show in chart
+                brotliSize: true, // Collect brotli size and show in chart
             }) : null,
 
             createSvgIconsPlugin({
-                // 指定需要缓存的图标文件夹
+                // Directory for icons to be cached
                 iconDirs: [path.resolve(process.cwd(), 'src/icons')],
-                // 指定symbolId格式
+                // symbolId format
                 symbolId: 'icon-[dir]-[name]',
             }),
             AutoImport({
                 resolvers: [
-                    // 自动导入图标组件
+                    // Auto import icon components
                     IconsResolver({
                         prefix: 'Icon',
                     }),
@@ -65,7 +65,7 @@ export default defineConfig(({ mode }) => {
             }),
             Components({
                 resolvers: [
-                    // 自动注册图标组件
+                    // Auto register icon components
                     IconsResolver({
                         enabledCollections: ['ep'],
                     }),
@@ -95,20 +95,20 @@ export default defineConfig(({ mode }) => {
             port: 6719,
             strictPort: true,
             watch: {
-                // 告诉 Vite 忽略监听 `src-tauri` 目录
+                // Tell Vite to ignore `src-tauri` directory
                 ignored: ['**/src-tauri/**'],
             },
             proxy: {
                 '/api': {
                     target: env.VITE_BASE_URL,
-                    // 是否跨域
+                    // Whether to cross-domain
                     changeOrigin: true,
-                    // 路径重写
+                    // Path rewrite
                     rewrite: path => path.replace(/^\/api/, ''),
                 },
             },
         },
-        // 添加有关当前构建目标的额外前缀，使这些 CLI 设置的 Tauri 环境变量可以在客户端代码中访问
+        // Add extra prefixes for current build target to make Tauri env variables accessible in client code
         envPrefix: ['VITE_', 'TAURI_ENV_*'],
         resolve: {
             alias: {
@@ -117,29 +117,29 @@ export default defineConfig(({ mode }) => {
         },
         build: {
             outDir: mode === 'file' ? 'dist-file' : 'dist',
-            // Tauri 在 Windows 上使用 Chromium，在 macOS 和 Linux 上使用 WebKit
+            // Tauri uses Chromium on Windows, WebKit on macOS and Linux
             // target: (process.env.TAURI_ENV_PLATFORM && mode !== 'file')
             //     ? (process.env.TAURI_ENV_PLATFORM === 'windows' ? 'chrome105' : 'safari13')
-            //     : 'es2020', // 普通前端可使用更高版本 JS 支持
+            //     : 'es2020', // Higher JS support for regular frontend
             minify: process.env.TAURI_ENV_PLATFORM
                 ? (!process.env.TAURI_ENV_DEBUG ? 'esbuild' : false)
-                : 'terser', // 普通构建推荐使用 terser 提供更强压缩选项
+                : 'terser', // Recommended to use terser for better compression
             terserOptions: {
                 compress: {
-                    // 生产环境时移除console
+                    // Remove console in production
                     drop_console: true,
                     drop_debugger: true,
                 },
             },
-            //   关闭文件计算
+            //   Disable file calculation
             reportCompressedSize: false,
-            //   关闭生成map文件 可以达到缩小打包体积
-            sourcemap: process.env.NODE_ENV === 'development' || !!process.env.TAURI_ENV_DEBUG, // 这个生产环境一定要关闭，不然打包的产物会很大
+            //   Disable map file generation to reduce bundle size
+            sourcemap: process.env.NODE_ENV === 'development' || !!process.env.TAURI_ENV_DEBUG, // Should be off in production
             rollupOptions: {
                 output: {
-                    chunkFileNames: `js/${chunkName}-[hash].js`, // 引入文件名的名称
-                    entryFileNames: `js/${chunkName}-[hash].js`, // 包的入口文件名称
-                    assetFileNames: `[ext]/${chunkName}-[hash].[ext]`, // 资源文件像 字体，图片等
+                    chunkFileNames: `js/${chunkName}-[hash].js`, // Filename for chunks
+                    entryFileNames: `js/${chunkName}-[hash].js`, // Entry point filename
+                    assetFileNames: `[ext]/${chunkName}-[hash].[ext]`, // Asset filenames (fonts, images, etc.)
                     manualChunks(id: any): string {
                         if (id.includes('node_modules')) {
                             return id
@@ -152,9 +152,9 @@ export default defineConfig(({ mode }) => {
                 },
             },
         },
-        // 使用这个必须在上面加/// <reference types="vitest" /> 不然会有类型报错
+        // Must add /// <reference types="vitest" /> above or there will be type errors
         test: {
-            globals: true, // --> 0.8.1+  请修改成globals
+            globals: true, // --> 0.8.1+ please change to globals
             environment: 'jsdom',
             // include: ['**/__tests__/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
             // passWithNoTests: true,

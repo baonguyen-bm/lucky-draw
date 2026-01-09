@@ -50,7 +50,7 @@ export function useElementStyle(element: any, person: IPersonConfig, index: numb
     // }
 
     element.children[2].style.fontSize = `${textSize * 0.5}px`
-    // 设置部门和身份的默认值
+    // Set default values for department and identity
     element.children[2].innerHTML = ''
     if (person.department || person.identity) {
         element.children[2].innerHTML = `${person.department ? person.department : ''}<br/>${person.identity ? person.identity : ''}`
@@ -60,10 +60,10 @@ export function useElementStyle(element: any, person: IPersonConfig, index: numb
 }
 
 /**
- * @description 设置抽中卡片的位置
- * 最少一个，最大十个
+ * @description Set the position of the drawn card
+ * Minimum one, maximum ten
  */
-// TODO:不超过5个时：单行排列；超过5个时，6：上3下3；7：上3下4；8：上3下5；9：上4下5；10：上5下5
+// TODO: When not exceeding 5: single line arrangement; When exceeding 5, 6: top 3 bottom 3; 7: top 3 bottom 4; 8: top 3 bottom 5; 9: top 4 bottom 5; 10: top 5 bottom 5
 export function useElementPosition(element: any, count: number, totalCount: number, cardSize: { width: number, height: number }, windowSize: { width: number, height: number }, cardIndex: number) {
     let xTable = 0
     let yTable = 0
@@ -71,9 +71,9 @@ export function useElementPosition(element: any, count: number, totalCount: numb
         x: 0,
         y: windowSize.height / 2 - cardSize.height * 0.9,
     }
-    // 有一行为偶数的特殊数量
+    // Special quantities where one row has an even number
     const specialPosition = [2, 4, 7, 9]
-    // 不包含特殊值的 和 分两行中第一行为奇数值的
+    // Excludes special values and cases where the first row in a two-row layout has an odd number of elements
     if (!specialPosition.includes(totalCount) || (totalCount > 5 && cardIndex < 5)) {
         const index = cardIndex % 5
         if (index === 0) {

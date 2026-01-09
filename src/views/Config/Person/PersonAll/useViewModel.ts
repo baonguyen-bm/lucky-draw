@@ -44,20 +44,20 @@ export function useViewModel({ exportInputFileRef }: { exportInputFileRef: Ref<H
             return templateData
         }
     }
-    /// 向worker发送消息
+    /// Send message to worker
     function sendWorkerMessage(message: any) {
         if (worker) {
             worker.postMessage(message)
         }
     }
-    /// 开始导入
+    /// Start importing
     async function startWorker(data: string) {
         loading?.show()
         getExcelTemplateContent()
         sendWorkerMessage({ type: 'start', data, templateData: await getExcelTemplateContent() })
     }
     /**
-     * 获取用户数据
+     * Get user data
      */
     async function handleFileChange(e: Event) {
         if (worker) {
@@ -65,13 +65,13 @@ export function useViewModel({ exportInputFileRef }: { exportInputFileRef: Ref<H
                 if (e.data.type === 'done') {
                     personConfig.resetPerson()
                     personConfig.addNotPersonList(e.data.data)
-                    // 提示导入成功
+                    // Prompt successful import
                     toast.open({
                         message: t('error.importSuccess'),
                         type: 'success',
                         position: 'top-right',
                     })
-                    // 导入成功后清空file input
+                    // Clear file input after successful import
                     clearFileInput()
                 }
                 if (e.data.type === 'error') {
@@ -88,7 +88,7 @@ export function useViewModel({ exportInputFileRef }: { exportInputFileRef: Ref<H
                         type: 'error',
                         position: 'top-right',
                     })
-                    // toast.warning(e.data.message || '导入错误')
+                    // toast.warning(e.data.message || 'Import error')
                 }
                 loading?.hide()
             }
@@ -96,14 +96,14 @@ export function useViewModel({ exportInputFileRef }: { exportInputFileRef: Ref<H
         const dataBinary = await readFileBinary(((e.target as HTMLInputElement).files as FileList)[0]!)
         startWorker(dataBinary)
     }
-    // 清空file input
+    // Clear file input
     function clearFileInput() {
         if (exportInputFileRef.value) {
             exportInputFileRef.value.value = ''
         }
     }
     function downloadTemplate() {
-    // 下载
+    // Download
         const templateFileName = i18n.global.t('data.xlsxName')
         const fileUrl = `${baseUrl}${templateFileName}`
         fetch(fileUrl)
@@ -121,10 +121,10 @@ export function useViewModel({ exportInputFileRef }: { exportInputFileRef: Ref<H
                 })
             })
     }
-    // 导出数据
+    // Export data
     function exportData() {
         let data = JSON.parse(JSON.stringify(allPersonList.value))
-        // 排除一些字段
+        // Exclude some fields
         for (let i = 0; i < data.length; i++) {
             delete data[i].x
             delete data[i].y
@@ -132,14 +132,14 @@ export function useViewModel({ exportInputFileRef }: { exportInputFileRef: Ref<H
             delete data[i].createTime
             delete data[i].updateTime
             delete data[i].prizeId
-            // 修改字段名称
+            // Rename fields
             if (data[i].isWin) {
                 data[i].isWin = i18n.global.t('data.yes')
             }
             else {
                 data[i].isWin = i18n.global.t('data.no')
             }
-            // 格式化数组为
+            // Format array to string
             data[i].prizeTime = data[i].prizeTime.join(',')
             data[i].prizeName = data[i].prizeName.join(',')
         }
@@ -176,7 +176,7 @@ export function useViewModel({ exportInputFileRef }: { exportInputFileRef: Ref<H
     }
     function addOnePerson(addOnePersonDrawerRef: any, event: any) {
         event.preventDefault()
-        // 表单中的验证信息清除
+        // Clear validation info in form
 
         const personData = addOtherInfo([toRaw(singlePersonData.value)])
         personData[0].id = uuidv4()

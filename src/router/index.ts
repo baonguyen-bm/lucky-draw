@@ -48,7 +48,7 @@ export const configRoutes = {
                 //     name:'OtherPersonConfig',
                 //     component:()=>import('@/views/Config/Person/OtherPersonConfig.vue'),
                 //     meta:{
-                //         title:'其他配置',
+                //         title:'Other Configuration',
                 //         icon:'other'
                 //     }
                 // }
@@ -138,7 +138,7 @@ const routes = [
 ]
 const envMode = import.meta.env.MODE
 const router = createRouter({
-    // 读取环境变量
+    // Read environment variables
     history: (envMode === 'file' || import.meta.env.TAURI_PLATFORM) ? createWebHashHistory() : createWebHistory(),
     routes,
 })

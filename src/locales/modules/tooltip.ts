@@ -16,6 +16,7 @@ export const tooltipEn = {
     timedStop: 'After the lottery begins, it will stop at a scheduled time by default, set to 0, with the unit in seconds. A value of 0 disables the scheduled stopping function',
     uploadImage: 'Upload Image',
     pleaseGoto: 'Please go to',
+    textColorTip: 'Setting the text color will override the title style',
 }
 
 export const tooltipZhCn = {
@@ -36,6 +37,7 @@ export const tooltipZhCn = {
     timedStop: '开始抽奖过后定时停止，默认为0，单位为秒，0为关闭定时停止功能',
     uploadImage: '上传图片',
     pleaseGoto: '请先前往',
+    textColorTip: '设置文本颜色会覆盖标题样式',
 }
 
 export const tooltip = {

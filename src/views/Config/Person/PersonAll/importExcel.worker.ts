@@ -1,6 +1,6 @@
 import * as XLSX from 'xlsx'
 import { addOtherInfo } from '@/utils'
-// 定义消息类型
+// Define message types
 interface WorkerMessage {
     type: 'start' | 'stop' | 'reset'
     data: any
@@ -13,7 +13,7 @@ function headersEqual(template: string[], actual: string[]): boolean {
     return template.length >= actual.length
       && actual.some(item => template.includes(item))
 }
-// 接收主线程消息
+// Receive messages from main thread
 globalThis.onmessage = async (e: MessageEvent<WorkerMessage>) => {
     switch (e.data.type) {
         case 'start':
@@ -44,7 +44,7 @@ globalThis.onmessage = async (e: MessageEvent<WorkerMessage>) => {
             globalThis.postMessage({
                 type: 'done',
                 data: allData,
-                message: '读取完成',
+                message: 'Read completed',
             })
             break
         }
@@ -52,7 +52,7 @@ globalThis.onmessage = async (e: MessageEvent<WorkerMessage>) => {
             globalThis.postMessage({
                 type: 'fail',
                 data: null,
-                message: '读取失败',
+                message: 'Read failed',
             })
             break
     }
