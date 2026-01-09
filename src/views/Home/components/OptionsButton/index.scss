@@ -137,27 +137,30 @@
     }
 
     .btn-neon {
-        --glow-color: rgb(217, 176, 255);
-        --glow-spread-color: rgba(191, 123, 255, 0.781);
-        --enhanced-glow-color: rgb(231, 206, 255);
-        --btn-color: rgb(100, 61, 136);
-        -webkit-animation: pulsate-fwd 0.9s ease-in-out infinite both;
-        animation: pulsate-fwd 0.9s ease-in-out infinite both;
+        --glow-color: rgb(255, 215, 0);
+        --glow-spread-color: rgba(255, 215, 0, 0.6);
+        --enhanced-glow-color: rgb(255, 235, 150);
+        --btn-color: rgb(139, 0, 0);
+        -webkit-animation: pulsate-fwd 0.9s ease-in-out infinite both, float-button 3s ease-in-out infinite;
+        animation: pulsate-fwd 0.9s ease-in-out infinite both, float-button 3s ease-in-out infinite;
         cursor: pointer;
-        border: .25em solid var(--glow-color);
-        padding: 1em 3em;
+        border: .3em solid var(--glow-color);
+        padding: 1.2em 3.5em;
         color: var(--glow-color);
-        font-size: 15px;
+        font-size: 18px;
         font-weight: bold;
         background-color: var(--btn-color);
-        border-radius: 1em;
+        border-radius: 1.2em;
         outline: none;
-        box-shadow: 0 0 1em .25em var(--glow-color),
-            0 0 4em 1em var(--glow-spread-color),
-            inset 0 0 .75em .25em var(--glow-color);
-        text-shadow: 0 0 .5em var(--glow-color);
+        box-shadow: 
+            0 0 1.5em .3em var(--glow-color),
+            0 0 5em 1.5em var(--glow-spread-color),
+            inset 0 0 .75em .25em var(--glow-color),
+            0 10px 30px rgba(139, 0, 0, 0.4);
+        text-shadow: 0 0 .8em var(--glow-color);
         position: relative;
         transition: all 0.3s;
+        transform: translateY(0);
         -webkit-animation: swing-in-top-fwd 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275) both;
         animation: swing-in-top-fwd 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275) both;
 
@@ -170,23 +173,38 @@
             height: 100%;
             width: 100%;
             background-color: var(--glow-spread-color);
-            filter: blur(2em);
-            opacity: .7;
+            filter: blur(2.5em);
+            opacity: .8;
             transform: perspective(1.5em) rotateX(35deg) scale(1, .6);
         }
 
         &:hover {
             color: var(--btn-color);
             background-color: var(--glow-color);
-            box-shadow: 0 0 1em .25em var(--glow-color),
-                0 0 4em 2em var(--glow-spread-color),
-                inset 0 0 .75em .25em var(--glow-color);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 
+                0 0 2em .4em var(--glow-color),
+                0 0 6em 2.5em var(--glow-spread-color),
+                inset 0 0 .75em .25em var(--glow-color),
+                0 15px 40px rgba(139, 0, 0, 0.5);
         }
 
         &:active {
-            box-shadow: 0 0 0.6em .25em var(--glow-color),
-                0 0 2.5em 2em var(--glow-spread-color),
-                inset 0 0 .5em .25em var(--glow-color);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 
+                0 0 1em .3em var(--glow-color),
+                0 0 3em 2em var(--glow-spread-color),
+                inset 0 0 .5em .25em var(--glow-color),
+                0 8px 25px rgba(139, 0, 0, 0.4);
+        }
+    }
+
+    @keyframes float-button {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-8px);
         }
     }
 

@@ -146,7 +146,7 @@ export function useViewModel() {
                 element.appendChild(avatarEmpty)
             }
 
-            element = useElementStyle(element, tableData.value[i], i, patternList.value, patternColor.value, cardColor.value, cardSize.value, textSize.value)
+            element = useElementStyle(element, tableData.value[i], i, patternList.value, patternColor.value, cardColor.value, cardSize.value, textSize.value, 'default', 'add', textColor.value)
             const object = new CSS3DObject(element)
             object.position.x = Math.random() * 4000 - 2000
             object.position.y = Math.random() * 4000 - 2000
@@ -201,7 +201,7 @@ export function useViewModel() {
                         if (luckyCardList.value.length) {
                             luckyCardList.value.forEach((cardIndex: any) => {
                                 const item = objects.value[cardIndex]
-                                useElementStyle(item.element, {} as any, i, patternList.value, patternColor.value, cardColor.value, cardSize.value, textSize.value, 'sphere')
+                                useElementStyle(item.element, {} as any, i, patternList.value, patternColor.value, cardColor.value, cardSize.value, textSize.value, 'sphere', 'change', textColor.value)
                             })
                         }
                         luckyTargets.value = []
@@ -451,7 +451,35 @@ export function useViewModel() {
             }
         }
         canOperate.value = false
+        
+        // Add shuffle animation - cards flip and shuffle
+        const objLength = objects.value.length
+        for (let i = 0; i < objLength; i++) {
+            const element = objects.value[i].element
+            element.style.transition = 'transform 0.3s ease'
+            element.style.transform = 'rotateY(180deg)'
+            setTimeout(() => {
+                element.style.transform = 'rotateY(0deg)'
+                // Reset transition after animation
+                setTimeout(() => {
+                    element.style.transition = ''
+                }, 300)
+            }, 300 + (i % 10) * 30)
+        }
+        
         await transform(targets.sphere, 1000)
+        
+        // Ensure all cards are fully visible in ready state
+        for (let i = 0; i < objects.value.length; i++) {
+            if (luckyCardList.value.includes(i)) {
+                continue
+            }
+            const element = objects.value[i].element
+            element.style.opacity = '1'
+            element.style.filter = 'brightness(1)'
+            element.style.boxShadow = ''
+        }
+        
         currentStatus.value = LotteryStatus.ready
         rollBall(0.1, 2000)
     }
@@ -542,6 +570,17 @@ export function useViewModel() {
         // Play end sound effect
         playEndSound()
 
+        // Reset all cards to full visibility
+        for (let i = 0; i < objects.value.length; i++) {
+            if (luckyCardList.value.includes(i)) {
+                continue
+            }
+            const element = objects.value[i].element
+            element.style.opacity = '1'
+            element.style.filter = 'brightness(1)'
+            element.style.boxShadow = ''
+        }
+
         //   clearInterval(intervalTimer.value)
         //   intervalTimer.value = null
         canOperate.value = false
@@ -562,12 +601,14 @@ export function useViewModel() {
                 }, 1200)
                 .easing(TWEEN.Easing.Exponential.InOut)
                 .onStart(() => {
-                    item.element = useElementStyle(item.element, person, cardIndex, patternList.value, patternColor.value, luckyColor.value, { width: cardSize.value.width * 2, height: cardSize.value.height * 2 }, textSize.value * 2, 'lucky')
+                    item.element = useElementStyle(item.element, person, cardIndex, patternList.value, patternColor.value, luckyColor.value, { width: cardSize.value.width * 2, height: cardSize.value.height * 2 }, textSize.value * 2, 'lucky', 'change', textColor.value)
                 })
                 .start()
                 .onComplete(() => {
                     canOperate.value = true
                     currentStatus.value = LotteryStatus.end
+                    // Fire confetti celebration
+                    confettiFire()
                 })
             new TWEEN.Tween(item.rotation)
                 .to({
@@ -687,11 +728,52 @@ export function useViewModel() {
                 cardRandomIndexArr.push(randomCardIndex)
                 personRandomIndexArr.push(randomPersonIndex)
             }
+            
+            // Only apply searchlight effect when lottery is running
+            const isLotteryRunning = currentStatus.value === LotteryStatus.running
+            
+            if (isLotteryRunning) {
+                // Reset all cards to normal state first (dim non-winners)
+                for (let i = 0; i < objects.value.length; i++) {
+                    if (luckyCardList.value.includes(i)) {
+                        continue
+                    }
+                    const element = objects.value[i].element
+                    element.style.opacity = '0.4'
+                    element.style.filter = 'brightness(0.7)'
+                    element.style.transition = 'opacity 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease'
+                }
+                
+                // Highlight potential winners with searchlight effect
+                for (let i = 0; i < cardRandomIndexArr.length; i++) {
+                    if (!objects.value[cardRandomIndexArr[i]]) {
+                        continue
+                    }
+                    const element = objects.value[cardRandomIndexArr[i]].element
+                    // Bright highlight for potential winner
+                    element.style.opacity = '1'
+                    element.style.filter = 'brightness(1.3)'
+                    element.style.boxShadow = `0 0 20px ${rgba(cardColor.value, 0.8)}, 0 0 40px ${rgba(cardColor.value, 0.5)}`
+                }
+            } else {
+                // Reset all cards to full visibility when not running
+                for (let i = 0; i < objects.value.length; i++) {
+                    if (luckyCardList.value.includes(i)) {
+                        continue
+                    }
+                    const element = objects.value[i].element
+                    element.style.opacity = '1'
+                    element.style.filter = 'brightness(1)'
+                    element.style.boxShadow = ''
+                }
+            }
+            
+            // Update card content
             for (let i = 0; i < cardRandomIndexArr.length; i++) {
                 if (!objects.value[cardRandomIndexArr[i]]) {
                     continue
                 }
-                objects.value[cardRandomIndexArr[i]].element = useElementStyle(objects.value[cardRandomIndexArr[i]].element, allPersonList.value[personRandomIndexArr[i]], cardRandomIndexArr[i], patternList.value, patternColor.value, cardColor.value, { width: cardSize.value.width, height: cardSize.value.height }, textSize.value, mod, 'change')
+                objects.value[cardRandomIndexArr[i]].element = useElementStyle(objects.value[cardRandomIndexArr[i]].element, allPersonList.value[personRandomIndexArr[i]], cardRandomIndexArr[i], patternList.value, patternColor.value, cardColor.value, { width: cardSize.value.width, height: cardSize.value.height }, textSize.value, mod, 'change', textColor.value)
             }
         }, 200)
     }
@@ -815,7 +897,7 @@ export function useViewModel() {
                 initThreeJs()
                 animation()
                 containerRef.value!.style.color = `${textColor}`
-                randomBallData()
+                // randomBallData() removed - should only be called when lottery starts, not during initialization
                 window.addEventListener('keydown', listenKeyboard)
                 isInitialDone.value = true
             }

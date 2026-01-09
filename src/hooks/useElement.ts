@@ -1,20 +1,23 @@
 import type { IPersonConfig } from '@/types/storeType'
 import { rgba } from '@/utils/color'
 
-export function useElementStyle(element: any, person: IPersonConfig, index: number, patternList: number[], patternColor: string, cardColor: string, cardSize: { width: number, height: number }, textSize: number, mod: 'default' | 'lucky' | 'sphere' = 'default', type: 'add' | 'change' = 'add') {
+export function useElementStyle(element: any, person: IPersonConfig, index: number, patternList: number[], patternColor: string, cardColor: string, cardSize: { width: number, height: number }, textSize: number, mod: 'default' | 'lucky' | 'sphere' = 'default', type: 'add' | 'change' = 'add', textColor: string = '#1a1a1a') {
+    // Use light background with consistent opacity for better readability
     if (patternList.includes(index + 1) && mod === 'default') {
-        element.style.backgroundColor = rgba(patternColor, Math.random() * 0.2 + 0.8)
+        element.style.backgroundColor = rgba(patternColor, 0.15)
     }
     else if (mod === 'sphere' || mod === 'default') {
-        element.style.backgroundColor = rgba(cardColor, Math.random() * 0.5 + 0.25)
+        // Use higher opacity for light backgrounds to ensure readability
+        element.style.backgroundColor = rgba(cardColor, 0.95)
     }
     else if (mod === 'lucky') {
-        element.style.backgroundColor = rgba(cardColor, 0.8)
+        element.style.backgroundColor = rgba(cardColor, 0.95)
     }
-    element.style.border = `1px solid ${rgba(cardColor, 0.25)}`
-    element.style.boxShadow = `0 0 12px ${rgba(cardColor, 0.5)}`
+    element.style.border = `1px solid ${rgba(cardColor, 0.3)}`
+    element.style.boxShadow = `0 4px 12px ${rgba(cardColor, 0.3)}`
     element.style.width = `${cardSize.width}px`
     element.style.height = `${cardSize.height}px`
+    element.style.transition = 'border 0.2s ease'
     if (mod === 'lucky') {
         element.className = 'lucky-element-card'
     }
@@ -24,23 +27,26 @@ export function useElementStyle(element: any, person: IPersonConfig, index: numb
     if (type === 'add') {
         element.addEventListener('mouseenter', (ev: MouseEvent) => {
             const target = ev.target as HTMLElement
-            target.style.border = `1px solid ${rgba(cardColor, 0.75)}`
-            target.style.boxShadow = `0 0 12px ${rgba(cardColor, 0.75)}`
+            // Only light the border slightly
+            target.style.border = `1px solid ${rgba(cardColor, 0.5)}`
         })
         element.addEventListener('mouseleave', (ev: MouseEvent) => {
             const target = ev.target as HTMLElement
-            target.style.border = `1px solid ${rgba(cardColor, 0.25)}`
-            target.style.boxShadow = `0 0 12px ${rgba(cardColor, 0.5)}`
+            target.style.border = `1px solid ${rgba(cardColor, 0.3)}`
         })
     }
+    // Apply text color to all text elements
     element.children[0].style.fontSize = `${textSize * 0.5}px`
+    element.children[0].style.color = textColor
     if (person.uid) {
         element.children[0].textContent = person.uid
     }
 
     element.children[1].style.fontSize = `${textSize}px`
     element.children[1].style.lineHeight = `${textSize * 3}px`
-    element.children[1].style.textShadow = `0 0 12px ${rgba(cardColor, 0.95)}`
+    element.children[1].style.color = textColor
+    // Use subtle dark shadow for light backgrounds instead of colored glow
+    element.children[1].style.textShadow = '0 1px 2px rgba(0, 0, 0, 0.1)'
     if (person.name) {
         element.children[1].textContent = person.name
     }
@@ -50,6 +56,7 @@ export function useElementStyle(element: any, person: IPersonConfig, index: numb
     // }
 
     element.children[2].style.fontSize = `${textSize * 0.5}px`
+    element.children[2].style.color = textColor
     // Set default values for department and identity
     element.children[2].innerHTML = ''
     if (person.department || person.identity) {

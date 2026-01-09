@@ -12,7 +12,7 @@ export const dataEn = {
     operation: 'Operation',
     delete: 'Delete',
     removePerson: 'Remove the Person',
-    defaultTitle: 'The Prelude to the Six Ministries of the Ming Dynasty Cabinet',
+    defaultTitle: '2026 Lucky Draw',
     xlsxName: 'personListTemplate-en.xlsx',
     readmeName: 'readme-en.md',
 }
@@ -31,7 +31,7 @@ export const dataZhCn = {
     operation: '操作',
     delete: '删除',
     removePerson: '移入未中奖名单',
-    defaultTitle: '大明内阁六部御前奏对',
+    defaultTitle: '2026 幸运抽奖',
     xlsxName: '人口登记表-zhCn.xlsx',
     readmeName: 'readme-zhCn.md',
 }

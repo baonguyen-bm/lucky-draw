@@ -138,3 +138,62 @@
         transform: translateX(-25%);
     }
 }
+
+// Current Prize Showcase - Prominent 3D Display
+.current-prize-showcase {
+    flex-shrink: 0;
+}
+
+.prize-card-3d {
+    background: linear-gradient(135deg, rgba(139, 0, 0, 0.2) 0%, rgba(255, 215, 0, 0.15) 100%);
+    backdrop-filter: blur(10px);
+    border: none;
+    box-shadow: 
+        0 8px 32px rgba(139, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 215, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transform-style: preserve-3d;
+}
+
+.prize-card-3d:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 
+        0 12px 40px rgba(139, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 215, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.prize-image-3d {
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+    transition: transform 0.3s ease;
+}
+
+.prize-card-3d:hover .prize-image-3d {
+    transform: translateZ(10px) scale(1.05);
+}
+
+// Next Up Queue
+.next-up-queue {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.prize-item-queue {
+    .prize-card-3d {
+        background: linear-gradient(135deg, rgba(139, 0, 0, 0.15) 0%, rgba(255, 215, 0, 0.1) 100%);
+        box-shadow: 
+            0 4px 16px rgba(139, 0, 0, 0.2),
+            0 0 0 1px rgba(255, 215, 0, 0.15);
+    }
+    
+    .prize-card-3d:hover {
+        transform: translateY(-2px) translateX(4px);
+        box-shadow: 
+            0 6px 20px rgba(139, 0, 0, 0.3),
+            0 0 0 1px rgba(255, 215, 0, 0.25);
+    }
+}

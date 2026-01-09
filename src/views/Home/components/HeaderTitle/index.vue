@@ -25,9 +25,8 @@ const isTextColor = computed(() => {
 const titleStyle = computed(() => {
     const style: CSSProperties = {
         fontSize: `${textSize.value * 1.5}px`,
-    }
-    if (!titleFontSyncGlobal.value) {
-        style.fontFamily = titleFont.value
+        fontFamily: titleFontSyncGlobal.value ? `"${titleFont.value}", "Cinzel", "Georgia", serif` : `"${titleFont.value}", "Cinzel", serif`,
+        fontWeight: 'bold',
     }
     if (isTextColor.value) {
         style.color = textColor.value
@@ -41,8 +40,8 @@ const { t } = useI18n()
 <template>
   <div class="absolute z-10 flex flex-col items-center justify-center -translate-x-1/2 left-1/2">
     <h2
-      class="pt-12 m-0 mb-12 tracking-wide text-center leading-12"
-      :class="{ 'animate-pulse bg-linear-to-r from-primary via-secondary to-accent bg-clip-text text-transparent': !isTextColor }"
+      class="pt-12 m-0 mb-12 tracking-wide text-center leading-12 title-gold"
+      :class="{ 'animate-pulse': !isTextColor }"
       :style="titleStyle"
     >
       {{ topTitle }}
@@ -110,6 +109,27 @@ const { t } = useI18n()
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
         opacity: 1;
+    }
+}
+
+.title-gold {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 25%, #FFD700 50%, #FFA500 75%, #FFD700 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gold-shimmer 3s ease-in-out infinite;
+    text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+    filter: drop-shadow(0 2px 4px rgba(255, 215, 0, 0.3));
+}
+
+@keyframes gold-shimmer {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
     }
 }
 </style>

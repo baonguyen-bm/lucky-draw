@@ -26,7 +26,7 @@ const { getTopTitle: topTitle, getTextColor: textColor, getTextSize: textSize, g
     :title-font="titleFont"
     :title-font-sync-global="titleFontSyncGlobal"
   />
-  <div id="container" ref="containerRef" class="3dContainer">
+  <div id="container" ref="containerRef" class="container-3d">
     <OptionButton
       :current-status="currentStatus"
       :table-data="tableData"
@@ -42,4 +42,18 @@ const { getTopTitle: topTitle, getTextColor: textColor, getTextSize: textSize, g
 </template>
 
 <style scoped lang="scss">
+.container-3d {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    z-index: 1;
+}
+
+#container {
+    width: 100%;
+    height: 100%;
+}
 </style>
