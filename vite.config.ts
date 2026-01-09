@@ -24,7 +24,7 @@ export default defineConfig(({ mode }) => {
     const chunkName = mode === 'prebuild' ? '[name]' : 'chunk'
     return {
         // base: (mode === 'file' || process.env.TAURI_ENV_PLATFORM) ? './' : '/log-lottery/',
-        base: (mode === 'file' || process.env.TAURI_ENV_PLATFORM) ? './' : '/',
+        base: process.env.VITE_BASE_URL || ((mode === 'file' || process.env.TAURI_ENV_PLATFORM) ? './' : '/log-lottery/'),
         plugins: [
             vue(),
             tailwindcss(),
