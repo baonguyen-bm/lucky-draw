@@ -34,12 +34,21 @@ export default defineConfig(({ mode }) => {
                 })
                 : null,
             // vueDevTools(),
+            // Gzip compression
             viteCompression({
                 verbose: true,
                 disable: false,
                 threshold: 10240,
                 algorithm: 'gzip',
                 ext: '.gz',
+            }),
+            // Brotli compression (better compression ratio than gzip)
+            viteCompression({
+                verbose: true,
+                disable: false,
+                threshold: 10240,
+                algorithm: 'brotliCompress',
+                ext: '.br',
             }),
             mode === 'prebuild' ? visualizer({
                 emitFile: true, // Whether to touch
@@ -141,13 +150,36 @@ export default defineConfig(({ mode }) => {
                     chunkFileNames: `js/${chunkName}-[hash].js`, // Filename for chunks
                     entryFileNames: `js/${chunkName}-[hash].js`, // Entry point filename
                     assetFileNames: `[ext]/${chunkName}-[hash].[ext]`, // Asset filenames (fonts, images, etc.)
-                    manualChunks(id: any): string {
+                    manualChunks(id: string): string | undefined {
                         if (id.includes('node_modules')) {
-                            return id
-                                .toString()
-                                .split('node_modules/')[1]
-                                .split('/')[0]
-                                .toString()
+                            // Large libraries get their own chunks for better caching
+                            if (id.includes('three')) {
+                                return 'vendor-three'
+                            }
+                            if (id.includes('gsap')) {
+                                return 'vendor-gsap'
+                            }
+                            // Vue core libraries
+                            if (id.includes('vue') && !id.includes('vue-router') && !id.includes('pinia')) {
+                                return 'vendor-vue'
+                            }
+                            if (id.includes('pinia') || id.includes('vue-router')) {
+                                return 'vendor-vue-core'
+                            }
+                            // UI component libraries
+                            if (id.includes('lucide') || id.includes('reka-ui') || id.includes('daisyui') || id.includes('sparticles')) {
+                                return 'vendor-ui'
+                            }
+                            // Utility libraries
+                            if (id.includes('lodash') || id.includes('dayjs') || id.includes('uuid') || id.includes('xlsx')) {
+                                return 'vendor-utils'
+                            }
+                            // Animation libraries
+                            if (id.includes('tween') || id.includes('canvas-confetti')) {
+                                return 'vendor-animation'
+                            }
+                            // Everything else grouped together
+                            return 'vendor-other'
                         }
                     },
                 },

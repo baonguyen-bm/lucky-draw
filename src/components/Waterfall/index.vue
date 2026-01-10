@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
-import { throttle } from 'lodash-es' // lodash-es 节流
+import { useThrottleFn } from '@vueuse/core' // Use @vueuse/core instead of lodash-es for better tree-shaking
 import Masonry from 'masonry-layout'
 import { nextTick, onMounted, onUnmounted, ref } from 'vue'
 
@@ -49,7 +49,7 @@ async function refreshLayout() {
 }
 
 // 窗口缩放节流重排（优化性能）
-const handleResize = throttle(() => {
+const handleResize = useThrottleFn(() => {
     if (masonryInstance.value) {
         masonryInstance.value.layout?.()
     }
@@ -67,9 +67,8 @@ onUnmounted(() => {
         masonryInstance.value.destroy?.()
         masonryInstance.value = null
     }
-    // 移除监听 + 取消节流任务
+    // 移除监听
     window.removeEventListener('resize', handleResize)
-    handleResize.cancel()
 })
 
 // 仅暴露刷新方法（适配卡片内部内容变化）

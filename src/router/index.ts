@@ -1,7 +1,8 @@
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import Layout from '@/layout/index.vue'
 import i18n from '@/locales/i18n'
-import Home from '@/views/Home/index.vue'
+// Lazy load Home component to reduce initial bundle size
+// Home component includes Three.js (~600KB) and other heavy dependencies
 
 export const configRoutes = {
     path: '/log-lottery/config',
@@ -125,7 +126,7 @@ const routes = [
             {
                 path: '/log-lottery/home',
                 name: 'Home',
-                component: Home,
+                component: () => import('@/views/Home/index.vue'),
             },
             {
                 path: '/log-lottery/demo',

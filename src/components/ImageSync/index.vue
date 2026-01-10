@@ -2,7 +2,7 @@
 import type { IFileData } from '../FileUpload/type'
 import type { IImage } from '@/types/storeType'
 import localforage from 'localforage'
-import { onMounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 
 interface IProps {
     imgItem: IImage
@@ -13,13 +13,16 @@ const imageDbStore = localforage.createInstance({
 })
 
 const imgUrl = ref('')
+const objectUrls = ref<string[]>([]) // Track object URLs for cleanup
 
 async function getImageStoreItem(item: IImage): Promise<string> {
     let image = ''
     if (item.url === 'Storage') {
         const key = item.id
         const imageData = await imageDbStore.getItem<IFileData>(key)
-        image = URL.createObjectURL(imageData?.data as Blob)
+        const url = URL.createObjectURL(imageData?.data as Blob)
+        objectUrls.value.push(url) // Track for cleanup
+        image = url
     }
     else {
         image = item.url as string
@@ -30,6 +33,12 @@ async function getImageStoreItem(item: IImage): Promise<string> {
 
 onMounted(async () => {
     imgUrl.value = await getImageStoreItem(props.imgItem)
+})
+
+onUnmounted(() => {
+    // Clean up object URLs to prevent memory leaks
+    objectUrls.value.forEach(url => URL.revokeObjectURL(url))
+    objectUrls.value = []
 })
 </script>
 

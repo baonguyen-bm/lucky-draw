@@ -2,7 +2,8 @@
 import { createPinia } from 'pinia'
 // pinia persistence
 import piniaPluginPersist from 'pinia-plugin-persist'
-import * as THREE from 'three'
+// Three.js is now lazy loaded only when needed (in Home component)
+// Removed global import to reduce initial bundle size by ~600KB
 import { createApp } from 'vue'
 import VueDOMPurifyHTML from 'vue-dompurify-html'
 import svgIcon from '@/components/SvgIcon/index.vue'
@@ -49,6 +50,6 @@ const app = createApp(App)
 const pinia = createPinia()
 pinia.use(piniaPluginPersist)
 
-app.config.globalProperties.$THREE = THREE // Mount to prototype
+// Removed $THREE global property - Three.js is imported directly where needed
 app.component('svg-icon', svgIcon)
 app.use(router).use(VueDOMPurifyHTML).use(pinia).use(i18n).mount('#app')

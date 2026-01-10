@@ -72,6 +72,11 @@ export function useViewModel() {
     const isInitialDone = ref<boolean>(false)
     const animationFrameId = ref<any>(null)
     const playingAudios = ref<HTMLAudioElement[]>([])
+    // Performance optimization: Track if render is needed
+    const needsRender = ref(false)
+    const lastRenderTime = ref(0)
+    const targetFPS = 60
+    const frameTime = 1000 / targetFPS // ~16.67ms per frame
 
     // Lottery music related
     const lotteryMusic = ref<HTMLAudioElement | null>(null)
@@ -90,25 +95,35 @@ export function useViewModel() {
         camera.value.position.z = cameraZ.value
         renderer.value = new CSS3DRenderer()
         renderer.value.setSize(width, height * 0.9)
-        renderer.value.domElement.style.position = 'absolute'
+        const rendererElement = renderer.value.domElement
+        rendererElement.style.position = 'absolute'
         // Vertical center
-        renderer.value.domElement.style.paddingTop = '50px'
-        renderer.value.domElement.style.top = '50%'
-        renderer.value.domElement.style.left = '50%'
-        renderer.value.domElement.style.transform = 'translate(-50%, -50%)'
-        WebGLoutput!.appendChild(renderer.value.domElement)
+        rendererElement.style.paddingTop = '50px'
+        rendererElement.style.top = '50%'
+        rendererElement.style.left = '50%'
+        rendererElement.style.transform = 'translate(-50%, -50%)'
+        // Performance: Enable GPU acceleration for renderer
+        rendererElement.style.willChange = 'transform'
+        rendererElement.style.transformStyle = 'preserve-3d'
+        rendererElement.style.backfaceVisibility = 'hidden'
+        WebGLoutput!.appendChild(rendererElement)
 
         controls.value = new TrackballControls(camera.value, renderer.value.domElement)
         controls.value.rotateSpeed = 1
         controls.value.staticMoving = true
         controls.value.minDistance = 500
         controls.value.maxDistance = 6000
-        controls.value.addEventListener('change', render)
+        // Performance: Use requestRender instead of direct render
+        controls.value.addEventListener('change', requestRender)
 
         const tableLen = tableData.value.length
         for (let i = 0; i < tableLen; i++) {
             let element = document.createElement('div')
             element.className = 'element-card'
+            // Performance: Enable GPU acceleration for 3D cards
+            element.style.willChange = 'transform'
+            element.style.transformStyle = 'preserve-3d'
+            element.style.backfaceVisibility = 'hidden'
 
             const number = document.createElement('div')
             number.className = 'card-id'
@@ -163,12 +178,34 @@ export function useViewModel() {
         targets.sphere = sphereVertices
         window.addEventListener('resize', onWindowResize, false)
         transform(targets.table, 1000)
-        render()
+        requestRender() // Initial render
     }
+    /**
+     * @description: Optimized render function with conditional rendering
+     * Only renders when needed and respects target FPS
+     */
     function render() {
-        if (renderer.value) {
-            renderer.value.render(scene.value, camera.value)
+        if (!renderer.value) return
+        
+        const now = performance.now()
+        const timeSinceLastRender = now - lastRenderTime.value
+        
+        // Throttle rendering to target FPS (skip if too soon)
+        if (timeSinceLastRender < frameTime) {
+            needsRender.value = true
+            return
         }
+        
+        renderer.value.render(scene.value, camera.value)
+        lastRenderTime.value = now
+        needsRender.value = false
+    }
+    
+    /**
+     * @description: Mark that a render is needed (for callbacks)
+     */
+    function requestRender() {
+        needsRender.value = true
     }
     /**
      * @description: Position transformation
@@ -210,10 +247,11 @@ export function useViewModel() {
                     })
             }
 
-            // This tween is used to execute simultaneously with position and rotation tweens, rendering the scene and camera via onUpdate after each data update
+            // This tween is used to execute simultaneously with position and rotation tweens
+            // Performance: Use requestRender instead of direct render to avoid excessive renders
             new TWEEN.Tween({})
                 .to({}, duration * 2)
-                .onUpdate(render)
+                .onUpdate(requestRender)
                 .start()
                 .onComplete(() => {
                     canOperate.value = true
@@ -223,25 +261,36 @@ export function useViewModel() {
     }
     /**
      * @description: Resize renderer when window size changes
+     * Performance: Use requestRender instead of direct render
      */
     function onWindowResize() {
         camera.value.aspect = window.innerWidth / window.innerHeight
         camera.value.updateProjectionMatrix()
 
         renderer.value.setSize(window.innerWidth, window.innerHeight)
-        render()
+        requestRender()
     }
 
     /**
-     * [animation update all tween && controls]
+     * [Optimized animation loop - only updates when needed]
+     * Reduces unnecessary updates and renders only when required
      */
     function animation() {
-        TWEEN.update()
+        const now = performance.now()
+        
+        // Update TWEEN animations (pass timestamp for better accuracy)
+        TWEEN.update(now)
+        
+        // Update controls (they handle their own change events via requestRender)
         if (controls.value) {
             controls.value.update()
         }
-        // Set automatic rotation
-        // Set camera position
+        
+        // Render if needed (either from controls or from TWEEN callbacks)
+        if (needsRender.value) {
+            render()
+        }
+        
         animationFrameId.value = requestAnimationFrame(animation)
     }
     /**
@@ -267,7 +316,7 @@ export function useViewModel() {
                     },
                     duration * 1000,
                 )
-                .onUpdate(render)
+                .onUpdate(requestRender)
                 .start()
                 .onStop(() => {
                     resolve('')
@@ -290,7 +339,7 @@ export function useViewModel() {
                 },
                 1000,
             )
-            .onUpdate(render)
+            .onUpdate(requestRender)
             .start()
             .onComplete(() => {
                 new TWEEN.Tween(camera.value.rotation)
@@ -302,7 +351,7 @@ export function useViewModel() {
                         },
                         1000,
                     )
-                    .onUpdate(render)
+                    .onUpdate(requestRender)
                     .start()
                     .onComplete(() => {
                         canOperate.value = true
@@ -314,6 +363,7 @@ export function useViewModel() {
                         camera.value.rotation.y = 0
                         camera.value.rotation.z = -0
                         controls.value.reset()
+                        requestRender() // Final render after reset
                     })
             })
     }
@@ -815,8 +865,9 @@ export function useViewModel() {
         TWEEN.removeAll()
 
         // Clean up animation loop
-        if ((window as any).cancelAnimationFrame) {
-            (window as any).cancelAnimationFrame(animationFrameId.value)
+        if (animationFrameId.value !== null && (window as any).cancelAnimationFrame) {
+            cancelAnimationFrame(animationFrameId.value)
+            animationFrameId.value = null
         }
         clearInterval(intervalTimer.value)
         intervalTimer.value = null
